@@ -2,7 +2,7 @@
 
 Add-on acessível para criar, listar, ler, editar e excluir entradas de diário no NVDA.
 
-## Recursos da versão 1.0
+## Recursos da versão 1.1
 
 - título e texto sem limite definido pelo add-on;
 - data da entrada escolhida por dia, mês e ano;
@@ -42,7 +42,7 @@ O arquivo instalável é um ZIP com a extensão `.nvda-addon`. Para empacotar ma
 ## Compatibilidade declarada
 
 - NVDA mínimo: 2025.1.0
-- Última API testada no manifesto: 2026.2.0
+- Última API testada no manifesto: 2026.1.1
 
 Os testes automatizados cobrem o armazenamento independente da interface. A validação completa da interface exige NVDA no Windows.
 
@@ -58,14 +58,20 @@ atualiza o nome do item no menu Ferramentas, a categoria de configurações e a
 descrição do gesto. A preferência fica em `diario/preferencias.json` e não
 altera nem recriptografa o cofre existente.
 
+A versão 1.1 prepara o complemento para a loja oficial do NVDA. O manifesto-base
+passa a usar inglês, como exigido pelos metadados da loja, enquanto português,
+espanhol, italiano e francês recebem manifestos localizados. Também foram
+acrescentados o endereço do repositório, o contato protegido do autor e a versão
+do NVDA realmente usada nos testes. O formato do cofre não foi alterado.
+
 ## Gerar o instalador
 
-Execute `python build-addon.py`. O arquivo será criado em `dist/diario-1.0.0.nvda-addon`.
+Execute `python build-addon.py`. O arquivo será criado em `dist/diario-1.1.0.nvda-addon`.
 
 ## Idiomas
 
 O português do Brasil é o idioma-base. Espanhol, italiano, francês e inglês
-estão incluídos na versão 1.0. O idioma é escolhido na categoria “Diário” das
+estão incluídos desde a versão 1.0. O idioma é escolhido na categoria “Diário” das
 configurações do NVDA.
 
 ## Licença

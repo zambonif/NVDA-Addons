@@ -6,7 +6,7 @@ import zipfile
 
 PROJECT_DIRECTORY = Path(__file__).resolve().parent
 OUTPUT_DIRECTORY = PROJECT_DIRECTORY / "dist"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 OUTPUT_FILE = OUTPUT_DIRECTORY / f"diario-{VERSION}.nvda-addon"
 INCLUDED_ROOTS = ("manifest.ini", "globalPlugins", "doc", "locale", "LICENSE.txt")
 
