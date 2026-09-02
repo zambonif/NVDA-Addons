@@ -1,0 +1,16 @@
+Diário para NVDA
+Copyright (C) 2026 Fernando de Paula Zamboni
+
+Este programa é software livre; você pode redistribuí-lo e/ou modificá-lo sob
+os termos da Licença Pública Geral GNU, conforme publicada pela Free Software
+Foundation; tanto a versão 2 da Licença como, a seu critério, qualquer versão
+posterior.
+
+Este programa é distribuído na expectativa de que seja útil, mas SEM QUALQUER
+GARANTIA; nem mesmo a garantia implícita de COMERCIALIZAÇÃO ou de ADEQUAÇÃO A
+UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral GNU para mais
+detalhes.
+
+Uma cópia completa da GNU GPL versão 2 está disponível em:
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+

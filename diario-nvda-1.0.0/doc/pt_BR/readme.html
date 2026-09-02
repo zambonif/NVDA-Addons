@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<title>Diário para NVDA</title>
+</head>
+<body>
+	<h1>Diário para NVDA</h1>
+	<p>Versão 1.0</p>
+	<p>O Diário para NVDA permite guardar entradas pessoais sem sair do leitor de tela. Cada entrada possui título, texto, uma data escolhida pelo usuário e a data e a hora em que foi criada automaticamente.</p>
+
+	<h2>Como abrir</h2>
+	<ul>
+		<li>No menu do NVDA, escolha Ferramentas e depois Diário.</li>
+		<li>Ou pressione NVDA+Alt+D. O comando também pode ser alterado nas opções de comandos do NVDA, na categoria Diário.</li>
+	</ul>
+	<p>Antes de mostrar a lista e os botões do Diário, o complemento solicita a senha. Ao escolher Bloquear e fechar, ou ao fechar a janela, será necessário informar a senha novamente na próxima abertura.</p>
+
+	<h2>Idioma</h2>
+	<p>Abra o menu do NVDA, escolha Preferências, Configurações e depois a categoria Diário. É possível escolher Português (Brasil), Español, Italiano, Français ou English sem alterar o idioma geral do NVDA.</p>
+	<p>As novas janelas do Diário passam a usar o idioma escolhido. Reinicie o NVDA para atualizar também o nome do item no menu Ferramentas, a categoria de configurações e a descrição do gesto de entrada.</p>
+	<p>A escolha fica no arquivo <code>diario/preferencias.json</code>. Esse arquivo contém somente o código do idioma e não modifica nem recriptografa <code>diario.enc</code>.</p>
+
+	<h2>Primeira abertura e migração</h2>
+	<p>Na primeira abertura da versão 0.2, crie uma senha com pelo menos oito caracteres. Também é possível cadastrar uma frase de recuperação.</p>
+	<p>Se houver entradas da versão 0.1, o complemento mostra quantas foram encontradas e as importa para o novo cofre. Os arquivos antigos sem criptografia só são removidos depois que o cofre criptografado é gravado e relido com sucesso. Se algum arquivo antigo não puder ser removido, o complemento informa seu nome.</p>
+
+	<h2>Como usar</h2>
+	<p>A janela principal apresenta as entradas da data mais recente para a mais antiga. A lista possui as colunas Título, Data da entrada e Criada em.</p>
+	<ul>
+		<li>Nova entrada: abre os campos de título, dia, mês, ano e texto da entrada.</li>
+		<li>Ler: abre a entrada selecionada em uma caixa de texto somente para leitura. Também é possível pressionar Enter sobre a entrada.</li>
+		<li>Editar: altera o título, a data escolhida e o texto, sem perder a data e a hora originais de criação.</li>
+		<li>Excluir: pede confirmação antes de remover a entrada da lista e do arquivo principal.</li>
+		<li>Alterar senha: confirma a senha atual e cadastra uma senha nova.</li>
+		<li>Frase de recuperação: cadastra, substitui ou remove a frase, sempre confirmando a senha atual.</li>
+		<li>Bloquear e fechar: fecha a lista e elimina da sessão a chave usada para abrir o cofre.</li>
+	</ul>
+
+	<h2>Atalhos da janela</h2>
+	<ul>
+		<li>Ctrl+N: nova entrada.</li>
+		<li>Enter: ler a entrada selecionada.</li>
+		<li>Ctrl+E ou F2: editar a entrada selecionada.</li>
+		<li>Delete: excluir a entrada selecionada.</li>
+		<li>Escape: fechar a janela ou cancelar a operação atual.</li>
+	</ul>
+
+	<h2>Armazenamento e privacidade</h2>
+	<p>As entradas ficam apenas no computador, dentro da pasta de configurações do NVDA, na subpasta <code>diario</code>. O arquivo principal chama-se <code>diario.enc</code> e a cópia de segurança chama-se <code>diario.backup.enc</code>. Os dois são criptografados. O Diário não envia os dados para a internet.</p>
+	<p>O conteúdo completo das entradas, inclusive títulos e datas, usa criptografia autenticada AES-256-GCM. No Windows, a operação é realizada pela API criptográfica CNG do próprio sistema. Uma chave aleatória do cofre é protegida pela senha usando PBKDF2-HMAC-SHA256 com 600 mil iterações. A frase de recuperação, quando cadastrada, protege separadamente a mesma chave.</p>
+	<p>A frase não mostra nem recupera a senha antiga. Ao confirmar a frase, o usuário precisa cadastrar uma senha nova. Na frase, letras maiúsculas e minúsculas e espaços repetidos não fazem diferença. Na senha, fazem diferença.</p>
+	<p>Escolha uma frase longa e difícil de adivinhar. Quem obtiver uma cópia dos arquivos pode tentar adivinhar senhas ou frases fracas sem abrir o NVDA. Se tanto a senha quanto a frase forem esquecidas, as entradas não poderão ser recuperadas pelo complemento.</p>
+	<p>A migração remove os arquivos antigos para impedir a leitura normal, mas não garante apagamento forense dos setores já gravados no disco. Cópias em backups do computador, sincronizadores ou SSDs podem continuar existindo fora do controle do complemento.</p>
+	<p>O campo de texto não estabelece limite de caracteres. Na prática, o tamanho possível depende da memória e do espaço disponível no computador.</p>
+
+	<h2>Autor e licença</h2>
+	<p>Autor: Fernando de Paula Zamboni.</p>
+	<p>Licença: GNU General Public License, versão 2 ou posterior.</p>
+</body>
+</html>
