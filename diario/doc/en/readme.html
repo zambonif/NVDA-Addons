@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Diary for NVDA</title>
+</head>
+<body>
+	<h1>Diary for NVDA</h1>
+	<p>Version 1.3.0</p>
+	<p>Diary for NVDA is an accessible, offline personal diary integrated with the screen reader. Its distinguishing combination is dated entries and automatic creation timestamps inside a password-protected encrypted vault, with optional recovery and an accessible real-time spell checker.</p>
+
+	<h2>Opening the Diary</h2>
+	<ul>
+		<li>From the NVDA menu, choose Tools, then Diary.</li>
+		<li>Or press NVDA+Alt+D. The command can be changed in Input Gestures, under the Diary category.</li>
+	</ul>
+	<p>The add-on requests the password before showing any entries. Lock and close, or closing the window, removes the key from the session, so the password is required again next time.</p>
+
+	<h2>Using the Diary</h2>
+	<p>The main window lists entries from the newest selected date to the oldest. Each entry has a title, text, a user-selected date and an automatically recorded creation date and time.</p>
+	<ul>
+		<li>New entry: opens title, day, month, year and entry text fields.</li>
+		<li>Read: opens the selected entry in a read-only text box. Enter on an entry also opens it.</li>
+		<li>Edit: changes the title, selected date and text without losing the original creation timestamp.</li>
+		<li>Delete: requests confirmation before removal.</li>
+		<li>Export backup: saves both encrypted vault copies in a ZIP.</li>
+		<li>Import backup: adds only entries that do not yet exist in the open Diary.</li>
+		<li>Change password: confirms the current password and sets a new one.</li>
+		<li>Recovery phrase: sets, replaces or removes the phrase after confirming the password.</li>
+	</ul>
+
+	<h2>Real-time spell checking</h2>
+	<p>The title and entry text are checked while typing. After a word is followed by a space, punctuation, Tab or Enter, a warning sound is played if the Windows dictionary considers it misspelled. The typed delimiter is always inserted, so you can ignore the warning and continue.</p>
+	<p>Place the caret on or after the word and press Applications, Shift+F10 or Alt+F10. You can also right-click the word. The accessible menu provides up to eight suggestions, selectable with the arrow keys and Enter, followed by:</p>
+	<ul>
+		<li>Ignore for this session: suppresses further warnings for the word until NVDA is restarted.</li>
+		<li>Add to local dictionary: saves the word in <code>dicionario.txt</code> and suppresses future warnings.</li>
+	</ul>
+	<p>The feature uses the native Windows Spell Checking API and the language selected for the Diary. If Windows has no dictionary for that language, only spell checking is unavailable; creating, reading and saving entries continues to work normally.</p>
+	<p><code>dicionario.txt</code> is a UTF-8 file containing only words explicitly added by the user. It is not encrypted because it contains no diary entries, and it is shared by all five interface languages.</p>
+
+	<h2>Encrypted backup export and import</h2>
+	<p>These two commands are available only after the Diary is unlocked. Export backup opens a Save dialog and creates a ZIP containing exactly <code>diario.enc</code> and <code>diario.backup.enc</code>. Both files remain encrypted; no entry data is written in plaintext.</p>
+	<p>Import backup validates both encrypted files in a temporary location, compares entry identifiers and saves only missing entries into the current vault. Existing entries are never replaced. Dates, titles, text and creation timestamps are preserved.</p>
+	<p>A backup from the same vault needs no additional password. An independently created vault has a different random key, even if its password text is the same, so the add-on requests that backup's password. It does not change the current Diary password. An invalid ZIP, incorrect password, cancellation or a backup with no new entries leaves the current Diary unchanged.</p>
+
+	<h2>Keyboard commands</h2>
+	<ul>
+		<li>NVDA+Alt+D: open the Diary.</li>
+		<li>Ctrl+N: new entry.</li>
+		<li>Enter: read the selected entry.</li>
+		<li>Ctrl+E or F2: edit.</li>
+		<li>Delete: delete.</li>
+		<li>Escape: close or cancel.</li>
+		<li>Applications, Shift+F10, Alt+F10 or right-click: suggestions for a misspelled word.</li>
+	</ul>
+
+	<h2>Interface language</h2>
+	<p>Open NVDA menu, Preferences, Settings, Diary. Choose Brazilian Portuguese, Spanish, Italian, French or English without changing NVDA's general language. New windows use the choice immediately. Restart NVDA to update the Tools menu item, settings category and input-gesture description as well.</p>
+
+	<h2>Storage, security and privacy</h2>
+	<p>Data remains on the computer, below the NVDA configuration directory in the <code>diario</code> folder. The main vault is <code>diario.enc</code>; its encrypted backup is <code>diario.backup.enc</code>. The add-on does not send entries to the internet.</p>
+	<p>All entry content, including titles and dates, uses authenticated AES-256-GCM encryption through Windows CNG. The random vault key is protected from the password with PBKDF2-HMAC-SHA256 using 600,000 iterations. If configured, the recovery phrase protects the same key separately.</p>
+	<p>The phrase does not reveal the old password; it permits the user to create a new one. If both password and phrase are forgotten, the add-on cannot recover the entries. Use long, hard-to-guess secrets and keep independent backups of the encrypted files.</p>
+	<p>Version 1.3.0 keeps the vault format compatible with version 1.1.0.</p>
+
+	<h2>Author and license</h2>
+	<p>Author: Fernando de Paula Zamboni.</p>
+	<p>License: GNU General Public License, version 2 or later.</p>
+</body>
+</html>

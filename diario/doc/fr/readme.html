@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Journal pour NVDA</title>
+</head>
+<body>
+	<h1>Journal pour NVDA</h1>
+	<p>Version 1.3.0</p>
+	<p>Journal pour NVDA est un journal personnel accessible et hors ligne intégré au lecteur d'écran. Sa combinaison distinctive réunit des entrées datées, l'enregistrement automatique de leur création, un coffre-fort chiffré protégé par mot de passe, une récupération facultative et une correction orthographique accessible en temps réel.</p>
+
+	<h2>Ouverture</h2>
+	<ul>
+		<li>Dans le menu NVDA, choisissez Outils, puis Journal.</li>
+		<li>Ou appuyez sur NVDA+Alt+D. La commande peut être modifiée dans Gestes de commandes, catégorie Journal.</li>
+	</ul>
+	<p>Le module demande le mot de passe avant d'afficher les entrées. Verrouiller et fermer, ou fermer la fenêtre, retire la clé de la session ; le mot de passe sera donc demandé à la prochaine ouverture.</p>
+
+	<h2>Utilisation</h2>
+	<p>La fenêtre principale classe les entrées de la date choisie la plus récente à la plus ancienne. Chaque entrée possède un titre, un texte, une date choisie ainsi qu'une date et une heure de création enregistrées automatiquement.</p>
+	<ul>
+		<li>Nouvelle entrée : ouvre les champs titre, jour, mois, année et texte.</li>
+		<li>Lire : ouvre l'entrée sélectionnée dans un champ en lecture seule. Entrée l'ouvre également.</li>
+		<li>Modifier : change le titre, la date choisie et le texte sans perdre l'horodatage original.</li>
+		<li>Supprimer : demande confirmation avant la suppression.</li>
+		<li>Exporter la sauvegarde : enregistre les deux copies chiffrées du coffre-fort dans un ZIP.</li>
+		<li>Importer une sauvegarde : ajoute uniquement les entrées absentes du Journal ouvert.</li>
+		<li>Changer le mot de passe : confirme le mot de passe actuel et en définit un nouveau.</li>
+		<li>Phrase de récupération : définit, remplace ou supprime la phrase après confirmation du mot de passe.</li>
+	</ul>
+
+	<h2>Correction orthographique en temps réel</h2>
+	<p>Le titre et le texte sont vérifiés pendant la saisie. Après un mot suivi d'une espace, d'un signe de ponctuation, de Tab ou d'Entrée, un avertissement retentit si le dictionnaire Windows le considère incorrect. Le caractère saisi est toujours inséré : vous pouvez ignorer l'avertissement et continuer.</p>
+	<p>Placez le curseur sur le mot ou juste après et appuyez sur Applications, Maj+F10 ou Alt+F10. Le clic droit fonctionne également. Le menu accessible présente jusqu'à huit suggestions, sélectionnables avec les flèches et Entrée, puis :</p>
+	<ul>
+		<li>Ignorer pour cette session : ne signale plus le mot jusqu'au redémarrage de NVDA.</li>
+		<li>Ajouter au dictionnaire local : enregistre le mot dans <code>dicionario.txt</code> et évite les avertissements futurs.</li>
+	</ul>
+	<p>Le correcteur utilise l'API orthographique native de Windows et la langue choisie pour le Journal. Si Windows ne possède pas de dictionnaire pour cette langue, seul le correcteur est désactivé ; la création, la lecture et l'enregistrement fonctionnent normalement.</p>
+	<p><code>dicionario.txt</code> est un fichier UTF-8 contenant uniquement les mots ajoutés par l'utilisateur. Il n'est pas chiffré, car il ne contient aucune entrée du journal, et il est partagé par les cinq langues.</p>
+
+	<h2>Exportation et importation de la sauvegarde chiffrée</h2>
+	<p>Ces commandes sont disponibles uniquement après le déverrouillage du Journal. Exporter la sauvegarde ouvre une boîte de dialogue pour choisir l'emplacement et crée un ZIP contenant exactement <code>diario.enc</code> et <code>diario.backup.enc</code>. Les deux fichiers restent chiffrés ; aucune donnée des entrées n'est écrite en clair.</p>
+	<p>Importer une sauvegarde valide les deux fichiers chiffrés dans un emplacement temporaire, compare les identifiants et enregistre dans le coffre-fort actuel uniquement les entrées absentes. Les entrées existantes ne sont jamais remplacées. Les dates, titres, textes et heures de création sont conservés.</p>
+	<p>Une sauvegarde du même coffre-fort ne demande aucun autre mot de passe. Un coffre-fort créé séparément possède une autre clé aléatoire, même si le texte du mot de passe est identique ; le module demande donc le mot de passe de cette sauvegarde. Cela ne modifie pas le mot de passe du Journal actuel. Un ZIP invalide, un mot de passe incorrect, une annulation ou l'absence de nouvelles entrées laisse le Journal inchangé.</p>
+
+	<h2>Raccourcis</h2>
+	<ul>
+		<li>NVDA+Alt+D : ouvrir le Journal.</li>
+		<li>Ctrl+N : nouvelle entrée.</li>
+		<li>Entrée : lire l'entrée sélectionnée.</li>
+		<li>Ctrl+E ou F2 : modifier.</li>
+		<li>Suppr : supprimer.</li>
+		<li>Échap : fermer ou annuler.</li>
+		<li>Applications, Maj+F10, Alt+F10 ou clic droit : suggestions pour le mot incorrect.</li>
+	</ul>
+
+	<h2>Langue</h2>
+	<p>Ouvrez menu NVDA, Préférences, Paramètres et Journal. Choisissez Português (Brasil), Español, Italiano, Français ou English sans changer la langue générale de NVDA. Les nouvelles fenêtres appliquent immédiatement le choix. Redémarrez NVDA pour actualiser également l'élément Outils, la catégorie et la description du geste.</p>
+
+	<h2>Stockage, sécurité et confidentialité</h2>
+	<p>Les données restent sur l'ordinateur, sous le dossier de configuration de NVDA, dans <code>diario</code>. Le coffre-fort principal est <code>diario.enc</code> ; sa sauvegarde chiffrée est <code>diario.backup.enc</code>. Le module n'envoie pas les entrées sur Internet.</p>
+	<p>Tout le contenu, y compris les titres et les dates, utilise un chiffrement authentifié AES-256-GCM via Windows CNG. La clé aléatoire du coffre-fort est protégée à partir du mot de passe avec PBKDF2-HMAC-SHA256 et 600 000 itérations. La phrase de récupération, si elle est configurée, protège séparément la même clé.</p>
+	<p>La phrase ne révèle pas l'ancien mot de passe ; elle permet d'en créer un nouveau. Si le mot de passe et la phrase sont oubliés, le module ne peut pas récupérer les entrées. Utilisez des secrets longs et difficiles à deviner et conservez des copies indépendantes des fichiers chiffrés.</p>
+	<p>La version 1.3.0 conserve un format de coffre-fort compatible avec la version 1.1.0.</p>
+
+	<h2>Auteur et licence</h2>
+	<p>Auteur : Fernando de Paula Zamboni.</p>
+	<p>Licence : GNU General Public License, version 2 ou ultérieure.</p>
+</body>
+</html>

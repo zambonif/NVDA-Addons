@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="utf-8">
+	<title>Diario per NVDA</title>
+</head>
+<body>
+	<h1>Diario per NVDA</h1>
+	<p>Versione 1.3.0</p>
+	<p>Diario per NVDA è un diario personale accessibile e offline integrato con lo screen reader. La sua combinazione distintiva riunisce voci con data scelta, registrazione automatica della creazione, una cassaforte crittografata protetta da password, recupero facoltativo e controllo ortografico accessibile in tempo reale.</p>
+
+	<h2>Apertura</h2>
+	<ul>
+		<li>Nel menu NVDA scegli Strumenti, quindi Diario.</li>
+		<li>Oppure premi NVDA+Alt+D. Il comando può essere modificato in Gesti e tasti d'immissione, categoria Diario.</li>
+	</ul>
+	<p>Il componente aggiuntivo richiede la password prima di mostrare le voci. Blocca e chiudi, oppure la chiusura della finestra, rimuove la chiave dalla sessione e richiede nuovamente la password alla prossima apertura.</p>
+
+	<h2>Utilizzo</h2>
+	<p>La finestra principale ordina le voci dalla data scelta più recente alla più vecchia. Ogni voce ha titolo, testo, una data scelta e data e ora di creazione registrate automaticamente.</p>
+	<ul>
+		<li>Nuova voce: apre titolo, giorno, mese, anno e testo.</li>
+		<li>Leggi: apre la voce selezionata in un campo di sola lettura. Anche Invio la apre.</li>
+		<li>Modifica: cambia titolo, data scelta e testo senza perdere la registrazione originale di creazione.</li>
+		<li>Elimina: chiede conferma prima della rimozione.</li>
+		<li>Esporta backup: salva le due copie crittografate della cassaforte in un ZIP.</li>
+		<li>Importa backup: aggiunge soltanto le voci non ancora presenti nel Diario aperto.</li>
+		<li>Cambia password: conferma quella attuale e ne imposta una nuova.</li>
+		<li>Frase di recupero: imposta, sostituisce o rimuove la frase dopo aver confermato la password.</li>
+	</ul>
+
+	<h2>Controllo ortografico in tempo reale</h2>
+	<p>Titolo e testo vengono controllati durante la digitazione. Dopo una parola seguita da spazio, punteggiatura, Tab o Invio, viene riprodotto un avviso se il dizionario di Windows la considera errata. Il carattere digitato viene sempre inserito, quindi puoi ignorare l'avviso e continuare.</p>
+	<p>Posiziona il cursore sulla parola o subito dopo e premi Applicazioni, Shift+F10 o Alt+F10. Funziona anche il clic destro. Il menu accessibile mostra fino a otto suggerimenti, selezionabili con frecce e Invio, oltre a:</p>
+	<ul>
+		<li>Ignora per questa sessione: non avvisa più sulla parola fino al riavvio di NVDA.</li>
+		<li>Aggiungi al dizionario locale: salva la parola in <code>dicionario.txt</code> ed evita avvisi futuri.</li>
+	</ul>
+	<p>Il correttore usa l'API ortografica nativa di Windows e la lingua scelta per il Diario. Se Windows non dispone del relativo dizionario, viene disattivato soltanto il correttore; creazione, lettura e salvataggio continuano a funzionare normalmente.</p>
+	<p><code>dicionario.txt</code> è un file UTF-8 con solo le parole aggiunte dall'utente. Non è crittografato perché non contiene voci del diario ed è condiviso dalle cinque lingue.</p>
+
+	<h2>Esportazione e importazione del backup crittografato</h2>
+	<p>Questi comandi sono disponibili solo dopo aver sbloccato il Diario. Esporta backup apre una finestra per scegliere dove salvare e crea un ZIP contenente esattamente <code>diario.enc</code> e <code>diario.backup.enc</code>. Entrambi i file restano crittografati; nessun dato delle voci viene scritto in chiaro.</p>
+	<p>Importa backup convalida i due file crittografati in una posizione temporanea, confronta gli identificatori e salva nella cassaforte corrente soltanto le voci assenti. Le voci esistenti non vengono mai sostituite. Date, titoli, testi e orari di creazione vengono conservati.</p>
+	<p>Un backup della stessa cassaforte non richiede un'altra password. Una cassaforte creata separatamente possiede un'altra chiave casuale, anche se il testo della password è uguale; perciò il componente aggiuntivo richiede la password di quel backup. Ciò non modifica la password del Diario corrente. Un ZIP non valido, una password errata, l'annullamento o l'assenza di nuove voci lasciano invariato il Diario.</p>
+
+	<h2>Scorciatoie</h2>
+	<ul>
+		<li>NVDA+Alt+D: apre il Diario.</li>
+		<li>Ctrl+N: nuova voce.</li>
+		<li>Invio: legge la voce selezionata.</li>
+		<li>Ctrl+E o F2: modifica.</li>
+		<li>Delete: elimina.</li>
+		<li>Escape: chiude o annulla.</li>
+		<li>Applicazioni, Shift+F10, Alt+F10 o clic destro: suggerimenti per la parola errata.</li>
+	</ul>
+
+	<h2>Lingua</h2>
+	<p>Apri menu NVDA, Preferenze, Impostazioni e Diario. Scegli Português (Brasil), Español, Italiano, Français o English senza cambiare la lingua generale di NVDA. Le nuove finestre applicano subito la scelta. Riavvia NVDA per aggiornare anche la voce Strumenti, la categoria e la descrizione del gesto.</p>
+
+	<h2>Archiviazione, sicurezza e privacy</h2>
+	<p>I dati restano sul computer, sotto la cartella di configurazione di NVDA, in <code>diario</code>. La cassaforte principale è <code>diario.enc</code>; il backup crittografato è <code>diario.backup.enc</code>. Il componente aggiuntivo non invia le voci a Internet.</p>
+	<p>Tutto il contenuto, inclusi titoli e date, usa crittografia autenticata AES-256-GCM tramite Windows CNG. La chiave casuale della cassaforte è protetta dalla password con PBKDF2-HMAC-SHA256 e 600.000 iterazioni. La frase di recupero, se configurata, protegge separatamente la stessa chiave.</p>
+	<p>La frase non rivela la vecchia password; permette di crearne una nuova. Se entrambe vengono dimenticate, il componente non può recuperare le voci. Usa segreti lunghi e difficili da indovinare e conserva copie indipendenti dei file crittografati.</p>
+	<p>La versione 1.3.0 mantiene il formato della cassaforte compatibile con la versione 1.1.0.</p>
+
+	<h2>Autore e licenza</h2>
+	<p>Autore: Fernando de Paula Zamboni.</p>
+	<p>Licenza: GNU General Public License, versione 2 o successiva.</p>
+</body>
+</html>

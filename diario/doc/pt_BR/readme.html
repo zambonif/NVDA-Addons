@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<title>Diário para NVDA</title>
+</head>
+<body>
+	<h1>Diário para NVDA</h1>
+	<p>Versão 1.3.0</p>
+	<p>O Diário para NVDA é um diário pessoal acessível e offline integrado ao leitor de telas. Seu diferencial é reunir entradas com data escolhida, registro automático da criação, cofre criptografado protegido por senha, recuperação opcional e corretor ortográfico acessível em tempo real.</p>
+
+	<h2>Como abrir</h2>
+	<ul>
+		<li>No menu do NVDA, escolha Ferramentas e depois Diário.</li>
+		<li>Ou pressione NVDA+Alt+D. O comando pode ser alterado em Gestos de Entrada, na categoria Diário.</li>
+	</ul>
+	<p>Antes de mostrar as entradas, o complemento pede a senha. Ao escolher Bloquear e fechar, ou fechar a janela, a chave é eliminada da sessão e será necessário informar a senha novamente.</p>
+
+	<h2>Como usar</h2>
+	<p>A janela principal apresenta as entradas da data mais recente para a mais antiga. Cada entrada possui título, texto, uma data escolhida pelo usuário e a data e hora em que foi criada automaticamente.</p>
+	<ul>
+		<li>Nova entrada: abre título, dia, mês, ano e texto.</li>
+		<li>Ler: abre a entrada selecionada em uma caixa somente para leitura. Enter sobre a entrada também a abre.</li>
+		<li>Editar: altera título, data escolhida e texto sem perder o registro original de criação.</li>
+		<li>Excluir: pede confirmação antes de remover.</li>
+		<li>Exportar backup: salva as duas cópias criptografadas do cofre em um ZIP.</li>
+		<li>Importar backup: acrescenta somente entradas que ainda não existem no Diário aberto.</li>
+		<li>Alterar senha: confirma a senha atual e cadastra outra.</li>
+		<li>Frase de recuperação: cadastra, substitui ou remove a frase após confirmar a senha.</li>
+	</ul>
+
+	<h2>Corretor ortográfico em tempo real</h2>
+	<p>O corretor atua no título e no texto da entrada. Depois de digitar uma palavra e pressionar espaço, pontuação, Tab ou Enter, toca um bip se o dicionário do Windows a considerar incorreta. O caractere digitado sempre é inserido; você pode ignorar o aviso e continuar escrevendo.</p>
+	<p>Coloque o cursor sobre a palavra ou depois dela e pressione Aplicações, Shift+F10 ou Alt+F10. Também é possível clicar na palavra com o botão direito. O menu acessível mostra até oito sugestões, que podem ser escolhidas com as setas e Enter, além de:</p>
+	<ul>
+		<li>Ignorar nesta sessão: não avisa novamente sobre a palavra até o NVDA ser reiniciado.</li>
+		<li>Adicionar ao dicionário local: grava a palavra em <code>dicionario.txt</code> e não avisa novamente.</li>
+	</ul>
+	<p>O corretor usa a API ortográfica nativa do Windows e o idioma escolhido para o Diário. Se o Windows não possuir um dicionário para esse idioma, somente o corretor fica indisponível; criar, ler e salvar entradas continua funcionando normalmente.</p>
+	<p><code>dicionario.txt</code> é um arquivo UTF-8 com apenas as palavras adicionadas pelo usuário. Ele não é criptografado, pois não contém entradas do diário, e é compartilhado pelos cinco idiomas da interface.</p>
+
+	<h2>Exportação e importação do backup criptografado</h2>
+	<p>Esses dois comandos ficam disponíveis somente depois que o Diário é desbloqueado. Exportar backup abre uma caixa para escolher onde salvar e cria um ZIP contendo exatamente <code>diario.enc</code> e <code>diario.backup.enc</code>. Os dois arquivos permanecem criptografados; nenhum dado de entrada é gravado sem criptografia.</p>
+	<p>Importar backup valida os dois arquivos criptografados em uma pasta temporária, compara os identificadores e grava no cofre atual somente as entradas ausentes. Entradas existentes nunca são substituídas. Datas, títulos, textos e horários de criação são preservados.</p>
+	<p>Um backup do mesmo cofre não pede outra senha. Um cofre criado separadamente possui outra chave aleatória, mesmo que o texto da senha seja igual; por isso, o complemento pede a senha daquele backup. Isso não altera a senha do Diário atual. ZIP inválido, senha incorreta, cancelamento ou ausência de entradas novas deixam o Diário atual inalterado.</p>
+
+	<h2>Atalhos</h2>
+	<ul>
+		<li>NVDA+Alt+D: abrir o Diário.</li>
+		<li>Ctrl+N: nova entrada.</li>
+		<li>Enter: ler a entrada selecionada.</li>
+		<li>Ctrl+E ou F2: editar.</li>
+		<li>Delete: excluir.</li>
+		<li>Escape: fechar ou cancelar.</li>
+		<li>Aplicações, Shift+F10, Alt+F10 ou clique direito: sugestões para a palavra incorreta.</li>
+	</ul>
+
+	<h2>Idioma</h2>
+	<p>Abra menu do NVDA, Preferências, Configurações e Diário. É possível escolher Português (Brasil), Español, Italiano, Français ou English sem alterar o idioma geral do NVDA. Novas janelas usam a escolha imediatamente. Reinicie o NVDA para atualizar também o item em Ferramentas, a categoria e a descrição do gesto.</p>
+
+	<h2>Armazenamento, segurança e privacidade</h2>
+	<p>Os dados ficam apenas no computador, abaixo da pasta de configurações do NVDA, na subpasta <code>diario</code>. O arquivo principal é <code>diario.enc</code> e a cópia de segurança criptografada é <code>diario.backup.enc</code>. O complemento não envia entradas à internet.</p>
+	<p>Todo o conteúdo das entradas, inclusive títulos e datas, usa criptografia autenticada AES-256-GCM pela CNG do Windows. A chave aleatória do cofre é protegida a partir da senha com PBKDF2-HMAC-SHA256 e 600 mil iterações. A frase de recuperação, quando cadastrada, protege separadamente a mesma chave.</p>
+	<p>A frase não revela a senha antiga; ela permite criar uma nova. Se tanto a senha quanto a frase forem esquecidas, o complemento não poderá recuperar as entradas. Use segredos longos e difíceis de adivinhar e mantenha cópias independentes dos arquivos criptografados.</p>
+	<p>A versão 1.3.0 mantém o formato do cofre compatível com a versão 1.1.0.</p>
+
+	<h2>Autor e licença</h2>
+	<p>Autor: Fernando de Paula Zamboni.</p>
+	<p>Licença: GNU General Public License, versão 2 ou posterior.</p>
+</body>
+</html>

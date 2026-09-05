@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Diario para NVDA</title>
+</head>
+<body>
+	<h1>Diario para NVDA</h1>
+	<p>Versión 1.3.0</p>
+	<p>Diario para NVDA es un diario personal accesible y sin conexión integrado con el lector de pantalla. Su combinación distintiva reúne entradas con fecha elegida, registro automático de creación, una bóveda cifrada protegida por contraseña, recuperación opcional y corrección ortográfica accesible en tiempo real.</p>
+
+	<h2>Abrir el Diario</h2>
+	<ul>
+		<li>En el menú de NVDA, elige Herramientas y después Diario.</li>
+		<li>O pulsa NVDA+Alt+D. El comando puede cambiarse en Gestos de entrada, categoría Diario.</li>
+	</ul>
+	<p>El complemento pide la contraseña antes de mostrar las entradas. Bloquear y cerrar, o cerrar la ventana, elimina la clave de la sesión y vuelve a pedir la contraseña la próxima vez.</p>
+
+	<h2>Uso</h2>
+	<p>La ventana principal ordena las entradas desde la fecha elegida más reciente hasta la más antigua. Cada entrada tiene título, texto, una fecha elegida y la fecha y hora de creación registradas automáticamente.</p>
+	<ul>
+		<li>Nueva entrada: abre los campos de título, día, mes, año y texto.</li>
+		<li>Leer: abre la entrada seleccionada en un campo de solo lectura. Enter también la abre.</li>
+		<li>Editar: cambia título, fecha elegida y texto sin perder el registro original de creación.</li>
+		<li>Eliminar: solicita confirmación antes de borrar.</li>
+		<li>Exportar copia: guarda las dos copias cifradas de la bóveda en un ZIP.</li>
+		<li>Importar copia: añade únicamente entradas que aún no existen en el Diario abierto.</li>
+		<li>Cambiar contraseña: confirma la actual y establece otra.</li>
+		<li>Frase de recuperación: configura, sustituye o elimina la frase tras confirmar la contraseña.</li>
+	</ul>
+
+	<h2>Corrección ortográfica en tiempo real</h2>
+	<p>El título y el texto se comprueban mientras escribes. Después de una palabra seguida por espacio, puntuación, Tab o Enter, suena un aviso si el diccionario de Windows la considera incorrecta. El carácter introducido siempre se conserva, por lo que puedes ignorar el aviso y continuar.</p>
+	<p>Coloca el cursor sobre la palabra o después de ella y pulsa Aplicaciones, Shift+F10 o Alt+F10. También funciona el clic derecho. El menú accesible muestra hasta ocho sugerencias, seleccionables con flechas y Enter, además de:</p>
+	<ul>
+		<li>Ignorar en esta sesión: no vuelve a avisar sobre la palabra hasta reiniciar NVDA.</li>
+		<li>Añadir al diccionario local: guarda la palabra en <code>dicionario.txt</code> y evita avisos futuros.</li>
+	</ul>
+	<p>El corrector usa la API ortográfica nativa de Windows y el idioma elegido para el Diario. Si Windows no tiene un diccionario para ese idioma, solo se desactiva el corrector; crear, leer y guardar entradas sigue funcionando con normalidad.</p>
+	<p><code>dicionario.txt</code> es un archivo UTF-8 que contiene únicamente las palabras añadidas por el usuario. No está cifrado porque no contiene entradas del diario y se comparte entre los cinco idiomas.</p>
+
+	<h2>Exportación e importación de copias cifradas</h2>
+	<p>Estos comandos solo están disponibles después de desbloquear el Diario. Exportar copia abre un diálogo para elegir dónde guardar y crea un ZIP que contiene exactamente <code>diario.enc</code> y <code>diario.backup.enc</code>. Ambos archivos permanecen cifrados; ningún dato de las entradas se escribe sin cifrar.</p>
+	<p>Importar copia valida los dos archivos cifrados en una ubicación temporal, compara los identificadores y guarda en la bóveda actual únicamente las entradas ausentes. Las entradas existentes nunca se sustituyen. Se conservan fechas, títulos, textos y horas de creación.</p>
+	<p>Una copia de la misma bóveda no solicita otra contraseña. Una bóveda creada por separado tiene otra clave aleatoria, aunque el texto de la contraseña sea igual; por eso, el complemento solicita la contraseña de esa copia. Esto no cambia la contraseña del Diario actual. Un ZIP no válido, una contraseña incorrecta, la cancelación o la ausencia de entradas nuevas dejan el Diario sin cambios.</p>
+
+	<h2>Atajos</h2>
+	<ul>
+		<li>NVDA+Alt+D: abrir el Diario.</li>
+		<li>Ctrl+N: nueva entrada.</li>
+		<li>Enter: leer la entrada seleccionada.</li>
+		<li>Ctrl+E o F2: editar.</li>
+		<li>Delete: eliminar.</li>
+		<li>Escape: cerrar o cancelar.</li>
+		<li>Aplicaciones, Shift+F10, Alt+F10 o clic derecho: sugerencias para una palabra incorrecta.</li>
+	</ul>
+
+	<h2>Idioma</h2>
+	<p>Abre menú de NVDA, Preferencias, Opciones y Diario. Elige Português (Brasil), Español, Italiano, Français o English sin cambiar el idioma general de NVDA. Las ventanas nuevas usan la elección de inmediato. Reinicia NVDA para actualizar también el elemento de Herramientas, la categoría y la descripción del gesto.</p>
+
+	<h2>Almacenamiento, seguridad y privacidad</h2>
+	<p>Los datos permanecen en el equipo, bajo la carpeta de configuración de NVDA, en <code>diario</code>. La bóveda principal es <code>diario.enc</code> y la copia cifrada es <code>diario.backup.enc</code>. El complemento no envía entradas a Internet.</p>
+	<p>Todo el contenido, incluidos títulos y fechas, usa cifrado autenticado AES-256-GCM mediante Windows CNG. La clave aleatoria de la bóveda se protege a partir de la contraseña con PBKDF2-HMAC-SHA256 y 600.000 iteraciones. La frase de recuperación, si se configura, protege por separado la misma clave.</p>
+	<p>La frase no revela la contraseña anterior; permite crear una nueva. Si se olvidan ambas, el complemento no puede recuperar las entradas. Usa secretos largos y difíciles de adivinar y conserva copias independientes de los archivos cifrados.</p>
+	<p>La versión 1.3.0 mantiene el formato de la bóveda compatible con la versión 1.1.0.</p>
+
+	<h2>Autor y licencia</h2>
+	<p>Autor: Fernando de Paula Zamboni.</p>
+	<p>Licencia: GNU General Public License, versión 2 o posterior.</p>
+</body>
+</html>
