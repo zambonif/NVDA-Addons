@@ -6,8 +6,22 @@
 </head>
 <body>
 	<h1>Diario per NVDA</h1>
-	<p>Versione 1.3.0</p>
+	<p>Versione 1.4.1</p>
 	<p>Diario per NVDA è un diario personale accessibile e offline integrato con lo screen reader. La sua combinazione distintiva riunisce voci con data scelta, registrazione automatica della creazione, una cassaforte crittografata protetta da password, recupero facoltativo e controllo ortografico accessibile in tempo reale.</p>
+
+	<h2>Novità della versione 1.4.1</h2>
+	<ul>
+		<li>La lingua del controllo ortografico può ora essere scelta separatamente. Per impostazione predefinita segue la lingua dell'interfaccia; Predefinita di sistema usa la lingua configurata in Windows, incluso il rumeno o qualsiasi altra lingua fornita dall'API ortografica installata.</li>
+		<li>Gli avvisi sonori possono essere disattivati senza disattivare i suggerimenti, il menu contestuale accessibile o il dizionario personale.</li>
+		<li>Le preferenze salvate dalle versioni precedenti restano compatibili.</li>
+	</ul>
+
+	<h2>Novità della versione 1.4.0</h2>
+	<ul>
+		<li>Rafforzamento della sicurezza dopo la segnalazione ricevuta: algoritmo PBKDF2, numero di iterazioni, lunghezza della chiave e scopo della derivazione sono ora autenticati con la chiave interna tramite AES-GCM. Il minimo accettato è di 600.000 iterazioni.</li>
+		<li>Compatibilità con le casseforti precedenti: allo sblocco di una cassaforte meno recente, la protezione utilizzata viene aggiornata automaticamente. La protezione della frase di recupero viene aggiornata quando la frase viene usata o modificata.</li>
+		<li>Importazione ed esportazione del dizionario personale in TXT UTF-8, con convalida e unione senza eliminare le parole esistenti.</li>
+	</ul>
 
 	<h2>Apertura</h2>
 	<ul>
@@ -38,6 +52,7 @@
 	</ul>
 	<p>Il correttore usa l'API ortografica nativa di Windows e la lingua scelta per il Diario. Se Windows non dispone del relativo dizionario, viene disattivato soltanto il correttore; creazione, lettura e salvataggio continuano a funzionare normalmente.</p>
 	<p><code>dicionario.txt</code> è un file UTF-8 con solo le parole aggiunte dall'utente. Non è crittografato perché non contiene voci del diario ed è condiviso dalle cinque lingue.</p>
+	<p>I pulsanti Esporta dizionario e Importa dizionario salvano una copia TXT e uniscono le parole di un'altra installazione. L'importazione convalida il file, conserva le parole esistenti e aggiunge soltanto quelle nuove.</p>
 
 	<h2>Esportazione e importazione del backup crittografato</h2>
 	<p>Questi comandi sono disponibili solo dopo aver sbloccato il Diario. Esporta backup apre una finestra per scegliere dove salvare e crea un ZIP contenente esattamente <code>diario.enc</code> e <code>diario.backup.enc</code>. Entrambi i file restano crittografati; nessun dato delle voci viene scritto in chiaro.</p>
@@ -56,13 +71,14 @@
 	</ul>
 
 	<h2>Lingua</h2>
-	<p>Apri menu NVDA, Preferenze, Impostazioni e Diario. Scegli Português (Brasil), Español, Italiano, Français o English senza cambiare la lingua generale di NVDA. Le nuove finestre applicano subito la scelta. Riavvia NVDA per aggiornare anche la voce Strumenti, la categoria e la descrizione del gesto.</p>
+	<p>Apri menu NVDA, Preferenze, Impostazioni e Diario. Scegli Português (Brasil), Español, Italiano, Français o English senza cambiare la lingua generale di NVDA. La lingua del controllo ortografico può seguire la lingua predefinita del sistema, coincidere con l'interfaccia o essere scelta separatamente. È inoltre possibile disattivare soltanto gli avvisi sonori. Le nuove finestre applicano subito la lingua dell'interfaccia. Riavvia NVDA per aggiornare anche la voce Strumenti, la categoria e la descrizione del gesto.</p>
 
 	<h2>Archiviazione, sicurezza e privacy</h2>
 	<p>I dati restano sul computer, sotto la cartella di configurazione di NVDA, in <code>diario</code>. La cassaforte principale è <code>diario.enc</code>; il backup crittografato è <code>diario.backup.enc</code>. Il componente aggiuntivo non invia le voci a Internet.</p>
 	<p>Tutto il contenuto, inclusi titoli e date, usa crittografia autenticata AES-256-GCM tramite Windows CNG. La chiave casuale della cassaforte è protetta dalla password con PBKDF2-HMAC-SHA256 e 600.000 iterazioni. La frase di recupero, se configurata, protegge separatamente la stessa chiave.</p>
+	<p>La versione 1.4.0 autentica anche l'algoritmo, il numero di iterazioni e tutti gli altri metadati di derivazione quando protegge la chiave interna. La modifica di tali parametri fa fallire la verifica crittografica. Quando si apre una cassaforte precedente, la protezione usata per sbloccarla viene aggiornata automaticamente.</p>
 	<p>La frase non rivela la vecchia password; permette di crearne una nuova. Se entrambe vengono dimenticate, il componente non può recuperare le voci. Usa segreti lunghi e difficili da indovinare e conserva copie indipendenti dei file crittografati.</p>
-	<p>La versione 1.3.0 mantiene il formato della cassaforte compatibile con la versione 1.1.0.</p>
+	<p>La versione 1.4.0 mantiene il formato della cassaforte compatibile con la versione 1.1.0.</p>
 
 	<h2>Autore e licenza</h2>
 	<p>Autore: Fernando de Paula Zamboni.</p>

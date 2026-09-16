@@ -6,8 +6,22 @@
 </head>
 <body>
 	<h1>Journal pour NVDA</h1>
-	<p>Version 1.3.0</p>
+	<p>Version 1.4.1</p>
 	<p>Journal pour NVDA est un journal personnel accessible et hors ligne intégré au lecteur d'écran. Sa combinaison distinctive réunit des entrées datées, l'enregistrement automatique de leur création, un coffre-fort chiffré protégé par mot de passe, une récupération facultative et une correction orthographique accessible en temps réel.</p>
+
+	<h2>Nouveautés de la version 1.4.1</h2>
+	<ul>
+		<li>La langue de correction peut désormais être choisie séparément. Par défaut, elle suit la langue de l'interface ; Langue par défaut du système utilise la langue configurée dans Windows, y compris le roumain ou toute autre langue proposée par l'API orthographique installée.</li>
+		<li>Les avertissements sonores peuvent être désactivés sans désactiver les suggestions, le menu contextuel accessible ni le dictionnaire personnel.</li>
+		<li>Les préférences enregistrées par les versions précédentes restent compatibles.</li>
+	</ul>
+
+	<h2>Nouveautés de la version 1.4.0</h2>
+	<ul>
+		<li>Renforcement de la sécurité à la suite du signalement reçu : l'algorithme PBKDF2, le nombre d'itérations, la longueur de clé et le rôle de la dérivation sont désormais authentifiés avec la clé interne par AES-GCM. Le minimum accepté est de 600 000 itérations.</li>
+		<li>Compatibilité avec les anciens coffres-forts : lors du déverrouillage d'un ancien coffre, la protection utilisée est mise à niveau automatiquement. Celle de la phrase de récupération est mise à niveau lorsque la phrase est utilisée ou modifiée.</li>
+		<li>Importation et exportation du dictionnaire personnel au format TXT UTF-8, avec validation et fusion sans supprimer les mots existants.</li>
+	</ul>
 
 	<h2>Ouverture</h2>
 	<ul>
@@ -38,6 +52,7 @@
 	</ul>
 	<p>Le correcteur utilise l'API orthographique native de Windows et la langue choisie pour le Journal. Si Windows ne possède pas de dictionnaire pour cette langue, seul le correcteur est désactivé ; la création, la lecture et l'enregistrement fonctionnent normalement.</p>
 	<p><code>dicionario.txt</code> est un fichier UTF-8 contenant uniquement les mots ajoutés par l'utilisateur. Il n'est pas chiffré, car il ne contient aucune entrée du journal, et il est partagé par les cinq langues.</p>
+	<p>Les boutons Exporter le dictionnaire et Importer le dictionnaire permettent d'enregistrer une copie TXT et de fusionner les mots d'une autre installation. L'importation valide le fichier, conserve les mots existants et ajoute uniquement les nouveaux.</p>
 
 	<h2>Exportation et importation de la sauvegarde chiffrée</h2>
 	<p>Ces commandes sont disponibles uniquement après le déverrouillage du Journal. Exporter la sauvegarde ouvre une boîte de dialogue pour choisir l'emplacement et crée un ZIP contenant exactement <code>diario.enc</code> et <code>diario.backup.enc</code>. Les deux fichiers restent chiffrés ; aucune donnée des entrées n'est écrite en clair.</p>
@@ -56,13 +71,14 @@
 	</ul>
 
 	<h2>Langue</h2>
-	<p>Ouvrez menu NVDA, Préférences, Paramètres et Journal. Choisissez Português (Brasil), Español, Italiano, Français ou English sans changer la langue générale de NVDA. Les nouvelles fenêtres appliquent immédiatement le choix. Redémarrez NVDA pour actualiser également l'élément Outils, la catégorie et la description du geste.</p>
+	<p>Ouvrez menu NVDA, Préférences, Paramètres et Journal. Choisissez Português (Brasil), Español, Italiano, Français ou English sans changer la langue générale de NVDA. La langue de correction peut suivre la langue par défaut du système, correspondre à l'interface ou être choisie séparément. Il est également possible de désactiver uniquement les avertissements sonores. Les nouvelles fenêtres appliquent immédiatement la langue de l'interface. Redémarrez NVDA pour actualiser également l'élément Outils, la catégorie et la description du geste.</p>
 
 	<h2>Stockage, sécurité et confidentialité</h2>
 	<p>Les données restent sur l'ordinateur, sous le dossier de configuration de NVDA, dans <code>diario</code>. Le coffre-fort principal est <code>diario.enc</code> ; sa sauvegarde chiffrée est <code>diario.backup.enc</code>. Le module n'envoie pas les entrées sur Internet.</p>
 	<p>Tout le contenu, y compris les titres et les dates, utilise un chiffrement authentifié AES-256-GCM via Windows CNG. La clé aléatoire du coffre-fort est protégée à partir du mot de passe avec PBKDF2-HMAC-SHA256 et 600 000 itérations. La phrase de récupération, si elle est configurée, protège séparément la même clé.</p>
+	<p>La version 1.4.0 authentifie également l'algorithme, le nombre d'itérations et toutes les autres métadonnées de dérivation lors de la protection de la clé interne. Toute modification de ces paramètres fait échouer la vérification cryptographique. Lors de l'ouverture d'un ancien coffre-fort, la protection utilisée pour le déverrouiller est automatiquement mise à niveau.</p>
 	<p>La phrase ne révèle pas l'ancien mot de passe ; elle permet d'en créer un nouveau. Si le mot de passe et la phrase sont oubliés, le module ne peut pas récupérer les entrées. Utilisez des secrets longs et difficiles à deviner et conservez des copies indépendantes des fichiers chiffrés.</p>
-	<p>La version 1.3.0 conserve un format de coffre-fort compatible avec la version 1.1.0.</p>
+	<p>La version 1.4.0 conserve un format de coffre-fort compatible avec la version 1.1.0.</p>
 
 	<h2>Auteur et licence</h2>
 	<p>Auteur : Fernando de Paula Zamboni.</p>

@@ -12,7 +12,7 @@ except ImportError:  # Somente para testes estáticos fora do Windows.
 import wx
 from logHandler import log
 
-from .i18n import getLanguage, translate as _
+from .i18n import getSpellCheckerLanguage, isSpellSoundEnabled, translate as _
 from .spellcheck import MAX_WORD_LENGTH, SpellCheckerService, finishesWord, wordRangeEnding, wordRangeNear
 
 
@@ -68,7 +68,7 @@ class SpellCheckTextCtrlController:
 		control = self.control
 		if not control or control.IsBeingDeleted():
 			return False
-		language = getLanguage()
+		language = getSpellCheckerLanguage()
 		if not self.service.available(language):
 			return False
 
@@ -174,7 +174,9 @@ class SpellCheckTextCtrlController:
 		try:
 			if not self.control or self.control.IsBeingDeleted():
 				return
-			if not self.service.isMisspelled(word, getLanguage()):
+			if not self.service.isMisspelled(word, getSpellCheckerLanguage()):
+				return
+			if not isSpellSoundEnabled():
 				return
 			if winsound is not None:
 				winsound.MessageBeep(winsound.MB_ICONEXCLAMATION)

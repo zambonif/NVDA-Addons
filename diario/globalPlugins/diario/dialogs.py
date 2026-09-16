@@ -353,6 +353,13 @@ class DiaryDialog(wx.Dialog):
 			backupButtons.Add(button, 0, wx.RIGHT, 8)
 		mainSizer.Add(backupButtons, 0, wx.LEFT | wx.RIGHT | wx.BOTTOM, 8)
 
+		dictionaryButtons = wx.BoxSizer(wx.HORIZONTAL)
+		self.exportDictionaryButton = wx.Button(self, label=_("Exportar &dicionário..."))
+		self.importDictionaryButton = wx.Button(self, label=_("Importar d&icionário..."))
+		for button in (self.exportDictionaryButton, self.importDictionaryButton):
+			dictionaryButtons.Add(button, 0, wx.RIGHT, 8)
+		mainSizer.Add(dictionaryButtons, 0, wx.LEFT | wx.RIGHT | wx.BOTTOM, 8)
+
 		securityButtons = wx.BoxSizer(wx.HORIZONTAL)
 		self.changePasswordButton = wx.Button(self, label=_("Alterar &senha..."))
 		self.recoveryButton = wx.Button(self, label=_("Frase de &recuperação..."))
@@ -375,6 +382,8 @@ class DiaryDialog(wx.Dialog):
 		self.deleteButton.Bind(wx.EVT_BUTTON, self._onDelete)
 		self.exportButton.Bind(wx.EVT_BUTTON, self._onExport)
 		self.importButton.Bind(wx.EVT_BUTTON, self._onImport)
+		self.exportDictionaryButton.Bind(wx.EVT_BUTTON, self._onExportDictionary)
+		self.importDictionaryButton.Bind(wx.EVT_BUTTON, self._onImportDictionary)
 		self.changePasswordButton.Bind(wx.EVT_BUTTON, self._onChangePassword)
 		self.recoveryButton.Bind(wx.EVT_BUTTON, self._onManageRecovery)
 		self.closeButton.Bind(wx.EVT_BUTTON, self._onCloseButton)
@@ -668,6 +677,61 @@ class DiaryDialog(wx.Dialog):
 			_("Importação concluída"),
 			wx.OK | wx.ICON_INFORMATION,
 		)
+
+	def _onExportDictionary(self, event):
+		fileDialog = wx.FileDialog(
+			self,
+			message=_("Salvar dicionário local"),
+			defaultFile="dicionario-diario.txt",
+			wildcard=_("Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*"),
+			style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+		)
+		try:
+			if fileDialog.ShowModal() != wx.ID_OK:
+				return
+			destinationPath = fileDialog.GetPath()
+		finally:
+			fileDialog.Destroy()
+		if not destinationPath.lower().endswith(".txt"):
+			destinationPath += ".txt"
+		try:
+			self.spellChecker.exportLocalDictionary(destinationPath)
+		except (OSError, UnicodeError):
+			log.exception("Não foi possível exportar o dicionário local do Diário.")
+			showMessage(self, _("Não foi possível exportar o dicionário local."), _("Erro no dicionário"), wx.OK | wx.ICON_ERROR)
+			return
+		showMessage(
+			self,
+			_("O dicionário local foi salvo em:\n{path}").format(path=destinationPath),
+			_("Dicionário exportado"),
+			wx.OK | wx.ICON_INFORMATION,
+		)
+
+	def _onImportDictionary(self, event):
+		fileDialog = wx.FileDialog(
+			self,
+			message=_("Abrir dicionário local"),
+			wildcard=_("Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*"),
+			style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
+		)
+		try:
+			if fileDialog.ShowModal() != wx.ID_OK:
+				return
+			sourcePath = fileDialog.GetPath()
+		finally:
+			fileDialog.Destroy()
+		try:
+			added = self.spellChecker.importLocalDictionary(sourcePath)
+		except (OSError, UnicodeError):
+			log.exception("Não foi possível importar o dicionário local do Diário.")
+			showMessage(self, _("O arquivo selecionado não é um dicionário válido do Diário."), _("Erro no dicionário"), wx.OK | wx.ICON_ERROR)
+			return
+		message = (
+			_("{count} palavra nova foi importada.")
+			if added == 1
+			else _("{count} palavras novas foram importadas.")
+		).format(count=added)
+		showMessage(self, message, _("Dicionário importado"), wx.OK | wx.ICON_INFORMATION)
 
 	def _unlockImportedVault(self, importedVault: SecureDiaryStorage):
 		try:

@@ -91,9 +91,9 @@ _S_OK = 0
 
 
 def languageTag(languageCode: str) -> str:
-	"""Converte o idioma próprio do Diário em uma marca reconhecida pelo Windows."""
+	"""Converte códigos próprios ou preserva uma marca BCP 47 do Windows."""
 
-	return LANGUAGE_TAGS.get(languageCode, LANGUAGE_TAGS["pt_BR"])
+	return LANGUAGE_TAGS.get(languageCode, languageCode.replace("_", "-"))
 
 
 def isWordCharacter(character: str) -> bool:
@@ -205,6 +205,39 @@ class LocalDictionary:
 		self._words = candidate
 		return True
 
+	def exportTo(self, destinationPath: str) -> None:
+		"""Exporta uma cópia UTF-8 do dicionário, inclusive quando está vazio."""
+
+		words = dict(self._words)
+		if not self._saveToPath(words, destinationPath):
+			raise OSError("não foi possível exportar o dicionário local")
+
+	def importFrom(self, sourcePath: str) -> int:
+		"""Valida e mescla palavras de outro dicionário; nunca apaga as atuais."""
+
+		if os.path.getsize(sourcePath) > MAX_DICTIONARY_BYTES:
+			raise OSError("o dicionário selecionado excede o limite de tamanho")
+		candidate = dict(self._words)
+		added = 0
+		with open(sourcePath, "r", encoding="utf-8-sig") as stream:
+			for rawLine in stream:
+				word = unicodedata.normalize("NFC", rawLine.strip())
+				if not word:
+					continue
+				if not isDictionaryWord(word):
+					raise OSError("o dicionário selecionado contém uma palavra inválida")
+				key = _wordKey(word)
+				if key not in candidate:
+					candidate[key] = word
+					added += 1
+				if len(candidate) > MAX_LOCAL_WORDS:
+					raise OSError("o dicionário selecionado contém palavras demais")
+		if not self._save(candidate):
+			raise OSError("não foi possível salvar o dicionário importado")
+		self._words = candidate
+		self._writable = True
+		return added
+
 	def _load(self) -> None:
 		try:
 			if os.path.getsize(self.path) > MAX_DICTIONARY_BYTES:
@@ -225,13 +258,21 @@ class LocalDictionary:
 			log.exception("Não foi possível carregar o dicionário local do Diário.")
 
 	def _save(self, words: dict[str, str]) -> bool:
+		return self._saveToPath(words, self.path)
+
+	def _saveToPath(self, words: dict[str, str], destinationPath: str) -> bool:
 		temporaryPath = None
 		try:
-			os.makedirs(self.directory, exist_ok=True)
+			destinationPath = os.path.abspath(destinationPath)
+			destinationDirectory = os.path.dirname(destinationPath)
+			if destinationPath == self.path:
+				os.makedirs(destinationDirectory, exist_ok=True)
+			if not os.path.isdir(destinationDirectory):
+				raise OSError("a pasta de destino não existe")
 			descriptor, temporaryPath = tempfile.mkstemp(
 				prefix="dicionario-",
 				suffix=".tmp",
-				dir=self.directory,
+				dir=destinationDirectory,
 				text=True,
 			)
 			with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as stream:
@@ -240,7 +281,7 @@ class LocalDictionary:
 					stream.write("\n")
 				stream.flush()
 				os.fsync(stream.fileno())
-			os.replace(temporaryPath, self.path)
+			os.replace(temporaryPath, destinationPath)
 			return True
 		except OSError:
 			log.exception("Não foi possível salvar o dicionário local do Diário.")
@@ -554,6 +595,21 @@ class SpellCheckerService:
 			except Exception:
 				self._disableCurrentBackend("adicionar uma palavra")
 		return True
+
+	def exportLocalDictionary(self, destinationPath: str) -> None:
+		self.localDictionary.exportTo(destinationPath)
+
+	def importLocalDictionary(self, sourcePath: str) -> int:
+		before = {_wordKey(word) for word in self.localDictionary.words}
+		added = self.localDictionary.importFrom(sourcePath)
+		if self._backend is not None:
+			try:
+				for word in self.localDictionary.words:
+					if _wordKey(word) not in before:
+						self._backend.ignore(word)
+			except Exception:
+				self._disableCurrentBackend("importar o dicionário local")
+		return added
 
 	def close(self) -> None:
 		if self._backend is not None:

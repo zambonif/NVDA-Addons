@@ -358,3 +358,90 @@ _BACKUP_TRANSLATIONS = {
 
 for _language, _messages in _BACKUP_TRANSLATIONS.items():
 	TRANSLATIONS[_language].update(_messages)
+
+
+_DICTIONARY_TRANSFER_TRANSLATIONS = {
+	"en": {
+		"Exportar &dicionário...": "Export &dictionary...", "Importar d&icionário...": "Import d&ictionary...",
+		"Salvar dicionário local": "Save local dictionary", "Abrir dicionário local": "Open local dictionary",
+		"Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*": "Text dictionaries (*.txt)|*.txt|All files (*.*)|*.*",
+		"Não foi possível exportar o dicionário local.": "The local dictionary could not be exported.",
+		"O dicionário local foi salvo em:\n{path}": "The local dictionary was saved to:\n{path}",
+		"Dicionário exportado": "Dictionary exported",
+		"O arquivo selecionado não é um dicionário válido do Diário.": "The selected file is not a valid Diary dictionary.",
+		"{count} palavra nova foi importada.": "{count} new word was imported.",
+		"{count} palavras novas foram importadas.": "{count} new words were imported.",
+		"Dicionário importado": "Dictionary imported",
+	},
+	"es": {
+		"Exportar &dicionário...": "Exportar &diccionario...", "Importar d&icionário...": "Importar d&iccionario...",
+		"Salvar dicionário local": "Guardar diccionario local", "Abrir dicionário local": "Abrir diccionario local",
+		"Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*": "Diccionarios de texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*",
+		"Não foi possível exportar o dicionário local.": "No se pudo exportar el diccionario local.",
+		"O dicionário local foi salvo em:\n{path}": "El diccionario local se guardó en:\n{path}",
+		"Dicionário exportado": "Diccionario exportado",
+		"O arquivo selecionado não é um dicionário válido do Diário.": "El archivo seleccionado no es un diccionario válido del Diario.",
+		"{count} palavra nova foi importada.": "Se importó {count} palabra nueva.",
+		"{count} palavras novas foram importadas.": "Se importaron {count} palabras nuevas.",
+		"Dicionário importado": "Diccionario importado",
+	},
+	"it": {
+		"Exportar &dicionário...": "Esporta &dizionario...", "Importar d&icionário...": "Importa d&izionario...",
+		"Salvar dicionário local": "Salva dizionario locale", "Abrir dicionário local": "Apri dizionario locale",
+		"Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*": "Dizionari di testo (*.txt)|*.txt|Tutti i file (*.*)|*.*",
+		"Não foi possível exportar o dicionário local.": "Impossibile esportare il dizionario locale.",
+		"O dicionário local foi salvo em:\n{path}": "Il dizionario locale è stato salvato in:\n{path}",
+		"Dicionário exportado": "Dizionario esportato",
+		"O arquivo selecionado não é um dicionário válido do Diário.": "Il file selezionato non è un dizionario valido del Diario.",
+		"{count} palavra nova foi importada.": "È stata importata {count} nuova parola.",
+		"{count} palavras novas foram importadas.": "Sono state importate {count} nuove parole.",
+		"Dicionário importado": "Dizionario importato",
+	},
+	"fr": {
+		"Exportar &dicionário...": "Exporter le &dictionnaire...", "Importar d&icionário...": "Importer le d&ictionnaire...",
+		"Salvar dicionário local": "Enregistrer le dictionnaire local", "Abrir dicionário local": "Ouvrir le dictionnaire local",
+		"Dicionários de texto (*.txt)|*.txt|Todos os arquivos (*.*)|*.*": "Dictionnaires texte (*.txt)|*.txt|Tous les fichiers (*.*)|*.*",
+		"Não foi possível exportar o dicionário local.": "Impossible d'exporter le dictionnaire local.",
+		"O dicionário local foi salvo em:\n{path}": "Le dictionnaire local a été enregistré dans :\n{path}",
+		"Dicionário exportado": "Dictionnaire exporté",
+		"O arquivo selecionado não é um dicionário válido do Diário.": "Le fichier sélectionné n'est pas un dictionnaire valide du Journal.",
+		"{count} palavra nova foi importada.": "{count} nouveau mot a été importé.",
+		"{count} palavras novas foram importadas.": "{count} nouveaux mots ont été importés.",
+		"Dicionário importado": "Dictionnaire importé",
+	},
+}
+
+for _language, _messages in _DICTIONARY_TRANSFER_TRANSLATIONS.items():
+	TRANSLATIONS[_language].update(_messages)
+
+
+# Preferências independentes do corretor ortográfico, introduzidas na 1.4.1.
+_SPELLCHECK_SETTINGS_TRANSLATIONS = {
+	"en": {
+		"Idioma do &corretor ortográfico:": "Spell-checking &language:",
+		"Padrão do sistema ({language})": "System default ({language})",
+		"Mesmo idioma da interface": "Same as interface language",
+		"&Emitir som ao encontrar uma palavra possivelmente incorreta": "&Play a sound when a word may be misspelled",
+	},
+	"es": {
+		"Idioma do &corretor ortográfico:": "Idioma del &corrector ortográfico:",
+		"Padrão do sistema ({language})": "Predeterminado del sistema ({language})",
+		"Mesmo idioma da interface": "Mismo idioma que la interfaz",
+		"&Emitir som ao encontrar uma palavra possivelmente incorreta": "&Emitir un sonido al encontrar una palabra posiblemente incorrecta",
+	},
+	"it": {
+		"Idioma do &corretor ortográfico:": "Lingua del controllo &ortografico:",
+		"Padrão do sistema ({language})": "Predefinita di sistema ({language})",
+		"Mesmo idioma da interface": "Stessa lingua dell'interfaccia",
+		"&Emitir som ao encontrar uma palavra possivelmente incorreta": "&Riproduci un suono quando una parola potrebbe essere errata",
+	},
+	"fr": {
+		"Idioma do &corretor ortográfico:": "Langue de la &correction orthographique :",
+		"Padrão do sistema ({language})": "Langue par défaut du système ({language})",
+		"Mesmo idioma da interface": "Même langue que l'interface",
+		"&Emitir som ao encontrar uma palavra possivelmente incorreta": "É&mettre un son lorsqu'un mot semble incorrect",
+	},
+}
+
+for _language, _messages in _SPELLCHECK_SETTINGS_TRANSLATIONS.items():
+	TRANSLATIONS[_language].update(_messages)

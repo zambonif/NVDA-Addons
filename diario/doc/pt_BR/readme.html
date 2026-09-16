@@ -6,8 +6,22 @@
 </head>
 <body>
 	<h1>Diário para NVDA</h1>
-	<p>Versão 1.3.0</p>
+	<p>Versão 1.4.1</p>
 	<p>O Diário para NVDA é um diário pessoal acessível e offline integrado ao leitor de telas. Seu diferencial é reunir entradas com data escolhida, registro automático da criação, cofre criptografado protegido por senha, recuperação opcional e corretor ortográfico acessível em tempo real.</p>
+
+	<h2>Novidades da versão 1.4.1</h2>
+	<ul>
+		<li>O idioma do corretor agora pode ser escolhido separadamente. Por padrão, ele acompanha o idioma da interface; a opção Padrão do sistema usa o idioma configurado no Windows, inclusive romeno ou qualquer outro oferecido pela API ortográfica instalada.</li>
+		<li>É possível desligar o aviso sonoro das palavras possivelmente incorretas sem desativar as sugestões, o menu acessível ou o dicionário pessoal.</li>
+		<li>As preferências gravadas pelas versões anteriores continuam compatíveis.</li>
+	</ul>
+
+	<h2>Novidades da versão 1.4.0</h2>
+	<ul>
+		<li>Reforço de segurança após a sugestão recebida: algoritmo, número de iterações, tamanho da chave e finalidade da derivação PBKDF2 agora são autenticados junto com a chave interna pelo AES-GCM. O mínimo aceito é de 600 mil iterações.</li>
+		<li>Compatibilidade com cofres anteriores: ao desbloquear um cofre antigo, a proteção utilizada é atualizada automaticamente. A proteção da frase de recuperação é atualizada quando a frase for usada ou alterada.</li>
+		<li>Importação e exportação do dicionário pessoal em TXT UTF-8, com validação e mesclagem sem apagar as palavras existentes.</li>
+	</ul>
 
 	<h2>Como abrir</h2>
 	<ul>
@@ -38,6 +52,7 @@
 	</ul>
 	<p>O corretor usa a API ortográfica nativa do Windows e o idioma escolhido para o Diário. Se o Windows não possuir um dicionário para esse idioma, somente o corretor fica indisponível; criar, ler e salvar entradas continua funcionando normalmente.</p>
 	<p><code>dicionario.txt</code> é um arquivo UTF-8 com apenas as palavras adicionadas pelo usuário. Ele não é criptografado, pois não contém entradas do diário, e é compartilhado pelos cinco idiomas da interface.</p>
+	<p>Os botões Exportar dicionário e Importar dicionário permitem guardar uma cópia em TXT e mesclar palavras de outra instalação. A importação valida o arquivo, preserva as palavras existentes e acrescenta somente as novas.</p>
 
 	<h2>Exportação e importação do backup criptografado</h2>
 	<p>Esses dois comandos ficam disponíveis somente depois que o Diário é desbloqueado. Exportar backup abre uma caixa para escolher onde salvar e cria um ZIP contendo exatamente <code>diario.enc</code> e <code>diario.backup.enc</code>. Os dois arquivos permanecem criptografados; nenhum dado de entrada é gravado sem criptografia.</p>
@@ -56,13 +71,14 @@
 	</ul>
 
 	<h2>Idioma</h2>
-	<p>Abra menu do NVDA, Preferências, Configurações e Diário. É possível escolher Português (Brasil), Español, Italiano, Français ou English sem alterar o idioma geral do NVDA. Novas janelas usam a escolha imediatamente. Reinicie o NVDA para atualizar também o item em Ferramentas, a categoria e a descrição do gesto.</p>
+	<p>Abra menu do NVDA, Preferências, Configurações e Diário. É possível escolher Português (Brasil), Español, Italiano, Français ou English sem alterar o idioma geral do NVDA. O idioma do corretor pode seguir o padrão do sistema, acompanhar a interface ou ser escolhido separadamente. Também é possível desligar somente os bipes ortográficos. Novas janelas usam a escolha da interface imediatamente. Reinicie o NVDA para atualizar também o item em Ferramentas, a categoria e a descrição do gesto.</p>
 
 	<h2>Armazenamento, segurança e privacidade</h2>
 	<p>Os dados ficam apenas no computador, abaixo da pasta de configurações do NVDA, na subpasta <code>diario</code>. O arquivo principal é <code>diario.enc</code> e a cópia de segurança criptografada é <code>diario.backup.enc</code>. O complemento não envia entradas à internet.</p>
 	<p>Todo o conteúdo das entradas, inclusive títulos e datas, usa criptografia autenticada AES-256-GCM pela CNG do Windows. A chave aleatória do cofre é protegida a partir da senha com PBKDF2-HMAC-SHA256 e 600 mil iterações. A frase de recuperação, quando cadastrada, protege separadamente a mesma chave.</p>
+	<p>A versão 1.4.0 também autentica o algoritmo, a quantidade de iterações e os demais metadados da derivação ao proteger a chave interna. Alterar esses parâmetros faz a verificação criptográfica falhar. Ao abrir um cofre anterior, a proteção utilizada no desbloqueio é atualizada automaticamente.</p>
 	<p>A frase não revela a senha antiga; ela permite criar uma nova. Se tanto a senha quanto a frase forem esquecidas, o complemento não poderá recuperar as entradas. Use segredos longos e difíceis de adivinhar e mantenha cópias independentes dos arquivos criptografados.</p>
-	<p>A versão 1.3.0 mantém o formato do cofre compatível com a versão 1.1.0.</p>
+	<p>A versão 1.4.0 mantém o formato do cofre compatível com a versão 1.1.0.</p>
 
 	<h2>Autor e licença</h2>
 	<p>Autor: Fernando de Paula Zamboni.</p>

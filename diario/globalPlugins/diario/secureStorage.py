@@ -31,6 +31,7 @@ VAULT_FILE_NAME = "diario.enc"
 VAULT_BACKUP_FILE_NAME = "diario.backup.enc"
 VAULT_FORMAT = "diarioNVDA"
 VAULT_FORMAT_VERSION = 1
+WRAPPER_METADATA_VERSION = 2
 KEY_LENGTH = 32
 NONCE_LENGTH = 12
 SALT_LENGTH = 16
@@ -42,6 +43,7 @@ PASSWORD_WRAP_AAD = b"diarioNVDA:wrap:password:v1"
 RECOVERY_WRAP_AAD = b"diarioNVDA:wrap:recovery:v1"
 PASSWORD_KDF_AD = b"diarioNVDA:kdf:password:v1"
 RECOVERY_KDF_AD = b"diarioNVDA:kdf:recovery:v1"
+MIN_PBKDF2_ITERATIONS = 600_000
 
 
 class SecureDiaryError(DiaryStorageError):
@@ -213,6 +215,24 @@ def _deriveKey(secret: bytes, salt: bytes, parameters: KdfParameters, associated
 		raise CryptoUnavailableError("Não foi possível executar o Argon2id deste cofre antigo.") from error
 
 
+def _authenticatedWrapAad(wrapperName: str, parameters: KdfParameters) -> bytes:
+	"""Autentica o propósito e todos os parâmetros que controlam a derivação."""
+
+	metadata = {
+		"format": VAULT_FORMAT,
+		"formatVersion": VAULT_FORMAT_VERSION,
+		"kdf": parameters.toDict(),
+		"metadataVersion": WRAPPER_METADATA_VERSION,
+		"wrapper": wrapperName,
+	}
+	return b"diarioNVDA:wrap-metadata:" + json.dumps(
+		metadata,
+		ensure_ascii=True,
+		sort_keys=True,
+		separators=(",", ":"),
+	).encode("ascii")
+
+
 def _aesEncrypt(key: bytes, nonce: bytes, plaintext: bytes, associatedData: bytes) -> bytes:
 	try:
 		return cryptoBackend.encrypt(key, nonce, plaintext, associatedData)
@@ -236,16 +256,22 @@ def _wrapDataKey(
 	secret: bytes,
 	parameters: KdfParameters,
 	kdfAssociatedData: bytes,
-	wrapAssociatedData: bytes,
+	wrapperName: str,
 ) -> dict:
 	salt = os.urandom(SALT_LENGTH)
 	nonce = os.urandom(NONCE_LENGTH)
 	wrappingKey = _deriveKey(secret, salt, parameters, kdfAssociatedData)
 	try:
-		wrappedKey = _aesEncrypt(bytes(wrappingKey), nonce, bytes(dataKey), wrapAssociatedData)
+		wrappedKey = _aesEncrypt(
+			bytes(wrappingKey),
+			nonce,
+			bytes(dataKey),
+			_authenticatedWrapAad(wrapperName, parameters),
+		)
 	finally:
 		_wipe(wrappingKey)
 	return {
+		"metadataVersion": WRAPPER_METADATA_VERSION,
 		"salt": _encode(salt),
 		"nonce": _encode(nonce),
 		"wrappedKey": _encode(wrappedKey),
@@ -257,7 +283,8 @@ def _unwrapDataKey(
 	secret: bytes,
 	parameters: KdfParameters,
 	kdfAssociatedData: bytes,
-	wrapAssociatedData: bytes,
+	wrapperName: str,
+	legacyWrapAssociatedData: bytes,
 ) -> bytearray:
 	if not isinstance(wrapped, dict):
 		raise VaultCorruptedError("A proteção da chave do cofre está ausente.")
@@ -268,6 +295,16 @@ def _unwrapDataKey(
 		"chave protegida",
 		expectedLength=WRAPPED_KEY_LENGTH,
 	)
+	metadataVersion = wrapped.get("metadataVersion", 1)
+	if metadataVersion == WRAPPER_METADATA_VERSION:
+		if parameters.algorithm == "pbkdf2-sha256" and parameters.iterations < MIN_PBKDF2_ITERATIONS:
+			raise VaultCorruptedError("O custo PBKDF2 autenticado está abaixo do mínimo seguro.")
+		wrapAssociatedData = _authenticatedWrapAad(wrapperName, parameters)
+	elif metadataVersion == 1:
+		# Compatibilidade com cofres criados até a versão 1.3.0.
+		wrapAssociatedData = legacyWrapAssociatedData
+	else:
+		raise VaultCorruptedError("A versão dos metadados da chave protegida não é reconhecida.")
 	wrappingKey = _deriveKey(secret, salt, parameters, kdfAssociatedData)
 	try:
 		try:
@@ -456,7 +493,7 @@ class SecureDiaryStorage:
 			normalizePassword(password),
 			self.kdfParameters,
 			PASSWORD_KDF_AD,
-			PASSWORD_WRAP_AAD,
+			"password",
 		)
 		recoveryWrapper = None
 		if recoveryPhrase is not None:
@@ -465,7 +502,7 @@ class SecureDiaryStorage:
 				normalizeRecoveryPhrase(recoveryPhrase),
 				self.kdfParameters,
 				RECOVERY_KDF_AD,
-				RECOVERY_WRAP_AAD,
+				"recovery",
 			)
 		return {
 			"format": VAULT_FORMAT,
@@ -498,6 +535,7 @@ class SecureDiaryStorage:
 			secret,
 			parameters,
 			kdfAssociatedData,
+			wrapperName,
 			wrapAssociatedData,
 		)
 		try:
@@ -507,11 +545,13 @@ class SecureDiaryStorage:
 				if primaryReadFailed:
 					raise
 				backupEnvelope = self._readEnvelope(self.backupPath)
+				parameters = KdfParameters.fromDict(backupEnvelope["kdf"])
 				backupKey = _unwrapDataKey(
 					backupEnvelope[wrapperName],
 					secret,
-					KdfParameters.fromDict(backupEnvelope["kdf"]),
+					parameters,
 					kdfAssociatedData,
+					wrapperName,
 					wrapAssociatedData,
 				)
 				_wipe(dataKey)
@@ -519,6 +559,21 @@ class SecureDiaryStorage:
 				envelope = backupEnvelope
 				entries = _decryptEntries(envelope["data"], dataKey)
 				primaryReadFailed = True
+			# Ao desbloquear um cofre antigo, autentica imediatamente os metadados
+			# do método utilizado. O outro método será atualizado quando for usado
+			# ou alterado, pois sua senha/frase não fica armazenada.
+			if envelope[wrapperName].get("metadataVersion", 1) == 1:
+				if parameters.algorithm == "pbkdf2-sha256" and parameters.iterations >= MIN_PBKDF2_ITERATIONS:
+					upgradedEnvelope = dict(envelope)
+					upgradedEnvelope[wrapperName] = _wrapDataKey(
+						dataKey,
+						secret,
+						parameters,
+						kdfAssociatedData,
+						wrapperName,
+					)
+					self._writeEnvelope(upgradedEnvelope, rotateBackup=False, synchronizeBackup=True)
+					envelope = upgradedEnvelope
 			return UnlockedDiaryStorage(
 				self,
 				envelope,
@@ -556,6 +611,15 @@ class SecureDiaryStorage:
 			_decode(wrapper.get("salt"), "salt", expectedLength=SALT_LENGTH)
 			_decode(wrapper.get("nonce"), "nonce da chave", expectedLength=NONCE_LENGTH)
 			_decode(wrapper.get("wrappedKey"), "chave protegida", expectedLength=WRAPPED_KEY_LENGTH)
+			metadataVersion = wrapper.get("metadataVersion", 1)
+			if metadataVersion not in (1, WRAPPER_METADATA_VERSION):
+				raise VaultCorruptedError("A versão dos metadados da chave protegida não é reconhecida.")
+			if (
+				metadataVersion == WRAPPER_METADATA_VERSION
+				and KdfParameters.fromDict(envelope["kdf"]).algorithm == "pbkdf2-sha256"
+				and KdfParameters.fromDict(envelope["kdf"]).iterations < MIN_PBKDF2_ITERATIONS
+			):
+				raise VaultCorruptedError("O custo PBKDF2 autenticado está abaixo do mínimo seguro.")
 		data = envelope.get("data")
 		if not isinstance(data, dict):
 			raise VaultCorruptedError("Os dados criptografados estão ausentes.")
@@ -675,7 +739,7 @@ class UnlockedDiaryStorage:
 			normalizePassword(newPassword),
 			parameters,
 			PASSWORD_KDF_AD,
-			PASSWORD_WRAP_AAD,
+			"password",
 		)
 		self.vault._writeEnvelope(newEnvelope, rotateBackup=False, synchronizeBackup=True)
 		self._envelope = newEnvelope
@@ -694,7 +758,7 @@ class UnlockedDiaryStorage:
 				normalizeRecoveryPhrase(newPhrase),
 				KdfParameters.fromDict(self._envelope["kdf"]),
 				RECOVERY_KDF_AD,
-				RECOVERY_WRAP_AAD,
+				"recovery",
 			)
 		self.vault._writeEnvelope(newEnvelope, rotateBackup=False, synchronizeBackup=True)
 		self._envelope = newEnvelope
@@ -713,6 +777,7 @@ class UnlockedDiaryStorage:
 			normalizePassword(password),
 			KdfParameters.fromDict(self._envelope["kdf"]),
 			PASSWORD_KDF_AD,
+			"password",
 			PASSWORD_WRAP_AAD,
 		)
 		try:

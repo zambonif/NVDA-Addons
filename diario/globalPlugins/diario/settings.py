@@ -5,7 +5,15 @@
 import wx
 from gui import guiHelper, settingsDialogs
 
-from .i18n import SUPPORTED_LANGUAGES, getLanguage, setLanguage, translate as _
+from .i18n import (
+	SUPPORTED_LANGUAGES,
+	getLanguage,
+	getSpellLanguagePreference,
+	getSystemLanguage,
+	isSpellSoundEnabled,
+	setPreferences,
+	translate as _,
+)
 
 
 class DiarySettingsPanel(settingsDialogs.SettingsPanel):
@@ -26,6 +34,26 @@ class DiarySettingsPanel(settingsDialogs.SettingsPanel):
 		except ValueError:
 			selection = 0
 		self.languageChoice.SetSelection(selection)
+		self._spellLanguageCodes = ["system", "interface"] + self._languageCodes
+		self.spellLanguageChoice = helper.addLabeledControl(
+			_("Idioma do &corretor ortográfico:"),
+			wx.Choice,
+			choices=[
+				_("Padrão do sistema ({language})").format(language=getSystemLanguage()),
+				_("Mesmo idioma da interface"),
+			] + [name for code, name in SUPPORTED_LANGUAGES],
+		)
+		try:
+			spellSelection = self._spellLanguageCodes.index(getSpellLanguagePreference())
+		except ValueError:
+			spellSelection = 0
+		self.spellLanguageChoice.SetSelection(spellSelection)
+		self.spellSoundCheckBox = wx.CheckBox(
+			self,
+			label=_("&Emitir som ao encontrar uma palavra possivelmente incorreta"),
+		)
+		helper.addItem(self.spellSoundCheckBox)
+		self.spellSoundCheckBox.SetValue(isSpellSoundEnabled())
 		notice = wx.StaticText(
 			self,
 			label=_(
@@ -38,5 +66,10 @@ class DiarySettingsPanel(settingsDialogs.SettingsPanel):
 
 	def onSave(self):
 		selection = self.languageChoice.GetSelection()
-		if selection >= 0:
-			setLanguage(self._languageCodes[selection])
+		spellSelection = self.spellLanguageChoice.GetSelection()
+		if selection >= 0 and spellSelection >= 0:
+			setPreferences(
+				self._languageCodes[selection],
+				self._spellLanguageCodes[spellSelection],
+				self.spellSoundCheckBox.GetValue(),
+			)

@@ -6,8 +6,22 @@
 </head>
 <body>
 	<h1>Diario para NVDA</h1>
-	<p>Versión 1.3.0</p>
+	<p>Versión 1.4.1</p>
 	<p>Diario para NVDA es un diario personal accesible y sin conexión integrado con el lector de pantalla. Su combinación distintiva reúne entradas con fecha elegida, registro automático de creación, una bóveda cifrada protegida por contraseña, recuperación opcional y corrección ortográfica accesible en tiempo real.</p>
+
+	<h2>Novedades de la versión 1.4.1</h2>
+	<ul>
+		<li>El idioma del corrector ahora se puede elegir por separado. De forma predeterminada sigue el idioma de la interfaz; Predeterminado del sistema utiliza el idioma configurado en Windows, incluido el rumano o cualquier otro proporcionado por la API ortográfica instalada.</li>
+		<li>Los avisos sonoros se pueden desactivar sin desactivar las sugerencias, el menú contextual accesible ni el diccionario personal.</li>
+		<li>Las preferencias guardadas por versiones anteriores siguen siendo compatibles.</li>
+	</ul>
+
+	<h2>Novedades de la versión 1.4.0</h2>
+	<ul>
+		<li>Refuerzo de seguridad tras el aviso recibido: el algoritmo PBKDF2, el número de iteraciones, la longitud de la clave y la finalidad de la derivación ahora se autentican con la clave interna mediante AES-GCM. El mínimo aceptado es de 600.000 iteraciones.</li>
+		<li>Compatibilidad con bóvedas anteriores: al desbloquear una bóveda antigua, la protección utilizada se actualiza automáticamente. La protección de la frase de recuperación se actualiza al usarla o cambiarla.</li>
+		<li>Importación y exportación del diccionario personal en TXT UTF-8, con validación y combinación sin borrar las palabras existentes.</li>
+	</ul>
 
 	<h2>Abrir el Diario</h2>
 	<ul>
@@ -38,6 +52,7 @@
 	</ul>
 	<p>El corrector usa la API ortográfica nativa de Windows y el idioma elegido para el Diario. Si Windows no tiene un diccionario para ese idioma, solo se desactiva el corrector; crear, leer y guardar entradas sigue funcionando con normalidad.</p>
 	<p><code>dicionario.txt</code> es un archivo UTF-8 que contiene únicamente las palabras añadidas por el usuario. No está cifrado porque no contiene entradas del diario y se comparte entre los cinco idiomas.</p>
+	<p>Los botones Exportar diccionario e Importar diccionario permiten guardar una copia TXT y combinar palabras de otra instalación. La importación valida el archivo, conserva las palabras existentes y añade solo las nuevas.</p>
 
 	<h2>Exportación e importación de copias cifradas</h2>
 	<p>Estos comandos solo están disponibles después de desbloquear el Diario. Exportar copia abre un diálogo para elegir dónde guardar y crea un ZIP que contiene exactamente <code>diario.enc</code> y <code>diario.backup.enc</code>. Ambos archivos permanecen cifrados; ningún dato de las entradas se escribe sin cifrar.</p>
@@ -56,13 +71,14 @@
 	</ul>
 
 	<h2>Idioma</h2>
-	<p>Abre menú de NVDA, Preferencias, Opciones y Diario. Elige Português (Brasil), Español, Italiano, Français o English sin cambiar el idioma general de NVDA. Las ventanas nuevas usan la elección de inmediato. Reinicia NVDA para actualizar también el elemento de Herramientas, la categoría y la descripción del gesto.</p>
+	<p>Abre menú de NVDA, Preferencias, Opciones y Diario. Elige Português (Brasil), Español, Italiano, Français o English sin cambiar el idioma general de NVDA. El idioma del corrector puede seguir el predeterminado del sistema, coincidir con la interfaz o elegirse por separado. También se pueden desactivar solamente los avisos sonoros. Las ventanas nuevas usan de inmediato el idioma de la interfaz. Reinicia NVDA para actualizar también el elemento de Herramientas, la categoría y la descripción del gesto.</p>
 
 	<h2>Almacenamiento, seguridad y privacidad</h2>
 	<p>Los datos permanecen en el equipo, bajo la carpeta de configuración de NVDA, en <code>diario</code>. La bóveda principal es <code>diario.enc</code> y la copia cifrada es <code>diario.backup.enc</code>. El complemento no envía entradas a Internet.</p>
 	<p>Todo el contenido, incluidos títulos y fechas, usa cifrado autenticado AES-256-GCM mediante Windows CNG. La clave aleatoria de la bóveda se protege a partir de la contraseña con PBKDF2-HMAC-SHA256 y 600.000 iteraciones. La frase de recuperación, si se configura, protege por separado la misma clave.</p>
+	<p>La versión 1.4.0 también autentica el algoritmo, el número de iteraciones y los demás metadatos de derivación al proteger la clave interna. Alterar esos parámetros hace que falle la verificación criptográfica. Al abrir una bóveda anterior, la protección utilizada para desbloquearla se actualiza automáticamente.</p>
 	<p>La frase no revela la contraseña anterior; permite crear una nueva. Si se olvidan ambas, el complemento no puede recuperar las entradas. Usa secretos largos y difíciles de adivinar y conserva copias independientes de los archivos cifrados.</p>
-	<p>La versión 1.3.0 mantiene el formato de la bóveda compatible con la versión 1.1.0.</p>
+	<p>La versión 1.4.0 mantiene el formato de la bóveda compatible con la versión 1.1.0.</p>
 
 	<h2>Autor y licencia</h2>
 	<p>Autor: Fernando de Paula Zamboni.</p>
