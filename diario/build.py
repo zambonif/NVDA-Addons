@@ -6,7 +6,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST = ROOT / "manifest.ini"
-VERSION = "1.4.1"
+VERSION = "1.4.2"
 OUTPUT_DIRECTORY = ROOT / "dist"
 OUTPUT_FILE = OUTPUT_DIRECTORY / f"diario-{VERSION}.nvda-addon"
 PACKAGE_ITEMS = (

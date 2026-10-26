@@ -106,7 +106,7 @@ class RelatedVaultTests(unittest.TestCase):
 			root = Path(directory)
 			currentDirectory = root / "current"
 			copyDirectory = root / "copy"
-			parameters = KdfParameters(iterations=1)
+			parameters = KdfParameters()
 			currentVault = SecureDiaryStorage(str(currentDirectory), parameters)
 			currentSession = currentVault.create(
 				[makeEntry("one", "One")],
@@ -132,7 +132,7 @@ class RelatedVaultTests(unittest.TestCase):
 			copyDirectory = root / "copy"
 			currentVault = SecureDiaryStorage(
 				str(currentDirectory),
-				KdfParameters(iterations=1),
+				KdfParameters(),
 			)
 			currentSession = currentVault.create(
 				[makeEntry("one", "One")],
@@ -157,7 +157,7 @@ class RelatedVaultTests(unittest.TestCase):
 	def test_independent_backup_requires_its_own_password(self):
 		with tempfile.TemporaryDirectory() as directory:
 			root = Path(directory)
-			parameters = KdfParameters(iterations=1)
+			parameters = KdfParameters()
 			currentVault = SecureDiaryStorage(str(root / "current"), parameters)
 			otherVault = SecureDiaryStorage(str(root / "other"), parameters)
 			currentSession = currentVault.create([], "password", None)
@@ -177,7 +177,7 @@ class RelatedVaultTests(unittest.TestCase):
 	def test_independent_export_can_be_staged_merged_and_saved(self):
 		with tempfile.TemporaryDirectory() as directory:
 			root = Path(directory)
-			parameters = KdfParameters(iterations=1)
+			parameters = KdfParameters()
 			currentVault = SecureDiaryStorage(str(root / "current"), parameters)
 			otherVault = SecureDiaryStorage(str(root / "other"), parameters)
 			localEntry = makeEntry("local", "Local")

@@ -1,9 +1,17 @@
-# Diary for NVDA 1.4.1
+# Diary for NVDA 1.4.2
 
 Diary for NVDA is an accessible personal diary integrated with the NVDA screen
 reader. It provides dated entries, password protection, an optional recovery
 phrase, an encrypted vault, encrypted backup import and export, and accessible
 real-time spell checking.
+
+## Changes in version 1.4.2
+
+When the current password is rejected while changing the password or recovery settings, the message now identifies the current password without referring to an incorrect recovery phrase. The message is translated into every supported language.
+
+Regression tests cover passwords up to 4,096 characters, including punctuation and Unicode. The user who reported the issue confirmed that the updated add-on works with his 128-character password and that the misleading message no longer appears. The recovery phrase remains optional.
+
+Run `python -m unittest discover -s tests -v` for the 29 regression tests.
 
 ## Changes in version 1.4.1
 
@@ -36,7 +44,7 @@ python build.py
 The add-on will be created at:
 
 ```text
-dist\diario-1.4.1.nvda-addon
+dist\diario-1.4.2.nvda-addon
 ```
 
 The source directory keeps `manifest.ini`, `README.md` and `build.py` at its

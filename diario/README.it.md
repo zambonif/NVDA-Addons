@@ -2,7 +2,14 @@
 
 [English](README.md) · [Português do Brasil](README.pt-BR.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Français](README.fr.md)
 
-Versione 1.3.0
+Versione 1.4.2
+
+## Novità della versione 1.4.2
+
+Se la password attuale viene rifiutata durante la modifica della password o del recupero, il messaggio ora identifica la password attuale senza menzionare una frase di recupero errata. Il messaggio è tradotto in tutte le lingue del componente aggiuntivo.
+
+I test di regressione coprono password fino a 4.096 caratteri, con punteggiatura e Unicode. L’utente che ha segnalato il problema ha confermato che il componente aggiornato funziona con la sua password di 128 caratteri e che il messaggio fuorviante non appare più. La frase di recupero rimane facoltativa.
+
 
 Diario per NVDA è un diario personale accessibile e offline, integrato con lo screen reader NVDA. La sua combinazione distintiva riunisce voci con data scelta, registrazione automatica della creazione, una cassaforte crittografata protetta da password, recupero facoltativo e controllo ortografico accessibile in tempo reale.
 
@@ -27,7 +34,7 @@ Diario per NVDA è un diario personale accessibile e offline, integrato con lo s
 
 ## Installazione e apertura
 
-Installa `diario-1.3.0.nvda-addon` dallo Store componenti aggiuntivi di NVDA oppure apri direttamente il pacchetto e conferma. Riavvia NVDA quando richiesto.
+Installa `diario-1.4.2.nvda-addon` aprendo direttamente il pacchetto e conferma. Riavvia NVDA quando richiesto.
 
 Apri il Diario da menu NVDA > Strumenti > Diario oppure premi NVDA+Alt+D. Il gesto può essere modificato in Gesti e tasti d'immissione, nella categoria Diario.
 

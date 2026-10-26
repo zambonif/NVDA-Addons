@@ -2,7 +2,14 @@
 
 [English](README.md) · [Português do Brasil](README.pt-BR.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Français](README.fr.md)
 
-Versión 1.3.0
+Versión 1.4.2
+
+## Cambios en la versión 1.4.2
+
+Si se rechaza la contraseña actual al cambiar la contraseña o la recuperación, el mensaje ahora identifica la contraseña actual sin mencionar una frase de recuperación incorrecta. El mensaje está traducido a todos los idiomas del complemento.
+
+Las pruebas de regresión cubren contraseñas de hasta 4.096 caracteres, con puntuación y Unicode. El usuario que informó del problema confirmó que el complemento actualizado funciona con su contraseña de 128 caracteres y que el mensaje confuso ya no aparece. La frase de recuperación sigue siendo opcional.
+
 
 Diario para NVDA es un diario personal accesible y sin conexión, integrado con el lector de pantalla NVDA. Su combinación distintiva reúne entradas con fecha elegida, registro automático de creación, una bóveda cifrada protegida por contraseña, recuperación opcional y corrección ortográfica accesible en tiempo real.
 
@@ -27,7 +34,7 @@ Diario para NVDA es un diario personal accesible y sin conexión, integrado con 
 
 ## Instalación y apertura
 
-Instala `diario-1.3.0.nvda-addon` desde la Tienda de complementos de NVDA o abre el paquete directamente y confirma la instalación. Reinicia NVDA cuando se solicite.
+Instala `diario-1.4.2.nvda-addon` abriendo el paquete directamente y confirma la instalación. Reinicia NVDA cuando se solicite.
 
 Abre el Diario desde menú de NVDA > Herramientas > Diario o pulsa NVDA+Alt+D. El gesto puede cambiarse en Gestos de entrada, dentro de la categoría Diario.
 

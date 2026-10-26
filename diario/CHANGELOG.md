@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2 — stable release
+
+- Fixed a misleading message: rejected current passwords now identify the current password instead of mentioning a recovery phrase. Added translations in English, Spanish, Italian and French.
+- Added regression coverage for long passwords, punctuation, Unicode, exact trailing characters, recovery, rejected attempts, encrypted backups and dialog value handling.
+- Promoted the tested 1.4.2-dev code to stable after the reporting user confirmed successful use of his 128-character password and removal of the misleading message. Local regression tests cover passwords up to 4,096 characters. The original failure was not reproduced locally.
+- Updated backup test fixtures to use the existing 600,000-iteration minimum. Encryption parameters and the vault format are unchanged.
+
 ## 1.3.0
 
 - Added Export backup and Import backup to the unlocked Diary window.

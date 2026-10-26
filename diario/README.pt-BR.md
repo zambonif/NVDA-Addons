@@ -2,7 +2,14 @@
 
 [English](README.md) · [Português do Brasil](README.pt-BR.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Français](README.fr.md)
 
-Versão 1.3.0
+Versão 1.4.2
+
+## Novidades da versão 1.4.2
+
+Quando a senha atual é rejeitada durante a alteração da senha ou da recuperação, a mensagem agora identifica a senha atual, sem mencionar uma frase de recuperação incorreta. A mensagem foi traduzida para todos os idiomas do complemento.
+
+Os testes de regressão abrangem senhas de até 4.096 caracteres, incluindo pontuação e Unicode. O usuário que relatou o problema confirmou que o addon atualizado funciona com sua senha de 128 caracteres e que o aviso confuso não aparece mais. A frase de recuperação continua opcional.
+
 
 O Diário para NVDA é um diário pessoal acessível e offline, integrado ao leitor de telas NVDA. Seu diferencial é reunir entradas com data escolhida, registro automático da criação, cofre criptografado protegido por senha, recuperação opcional e corretor ortográfico acessível em tempo real.
 
@@ -27,7 +34,7 @@ O Diário para NVDA é um diário pessoal acessível e offline, integrado ao lei
 
 ## Instalação e abertura
 
-Instale `diario-1.3.0.nvda-addon` pela Loja de Complementos do NVDA ou abra o pacote diretamente e confirme a instalação. Reinicie o NVDA quando solicitado.
+Instale `diario-1.4.2.nvda-addon` abrindo o pacote diretamente e confirme a instalação. Reinicie o NVDA quando solicitado.
 
 Abra pelo menu do NVDA > Ferramentas > Diário ou pressione NVDA+Alt+D. O gesto pode ser alterado em Gestos de Entrada, na categoria Diário.
 

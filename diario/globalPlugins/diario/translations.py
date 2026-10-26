@@ -445,3 +445,10 @@ _SPELLCHECK_SETTINGS_TRANSLATIONS = {
 
 for _language, _messages in _SPELLCHECK_SETTINGS_TRANSLATIONS.items():
 	TRANSLATIONS[_language].update(_messages)
+
+
+# The shared storage error is displayed through _(str(error)) by both dialogs.
+TRANSLATIONS["en"]["A senha atual está incorreta."] = "The current password is incorrect."
+TRANSLATIONS["es"]["A senha atual está incorreta."] = "La contraseña actual es incorrecta."
+TRANSLATIONS["it"]["A senha atual está incorreta."] = "La password attuale non è corretta."
+TRANSLATIONS["fr"]["A senha atual está incorreta."] = "Le mot de passe actuel est incorrect."

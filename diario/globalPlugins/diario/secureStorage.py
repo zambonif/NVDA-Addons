@@ -772,14 +772,19 @@ class UnlockedDiaryStorage:
 		self._locked = True
 
 	def _verifyPassword(self, password: str) -> None:
-		candidateKey = _unwrapDataKey(
-			self._envelope["password"],
-			normalizePassword(password),
-			KdfParameters.fromDict(self._envelope["kdf"]),
-			PASSWORD_KDF_AD,
-			"password",
-			PASSWORD_WRAP_AAD,
-		)
+		try:
+			candidateKey = _unwrapDataKey(
+				self._envelope["password"],
+				normalizePassword(password),
+				KdfParameters.fromDict(self._envelope["kdf"]),
+				PASSWORD_KDF_AD,
+				"password",
+				PASSWORD_WRAP_AAD,
+			)
+		except InvalidSecretError as error:
+			# This operation verifies only the current password. The shared
+			# unwrap error must not suggest a missing or incorrect recovery phrase.
+			raise InvalidSecretError("A senha atual está incorreta.") from error
 		try:
 			if not hmac.compare_digest(bytes(candidateKey), bytes(self._dataKey)):
 				raise InvalidSecretError("A senha atual está incorreta.")

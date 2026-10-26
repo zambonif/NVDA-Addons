@@ -6,8 +6,12 @@
 </head>
 <body>
 	<h1>Diary for NVDA</h1>
-	<p>Version 1.4.1</p>
+	<p>Version 1.4.2</p>
 	<p>Diary for NVDA is an accessible, offline personal diary integrated with the screen reader. Its distinguishing combination is dated entries and automatic creation timestamps inside a password-protected encrypted vault, with optional recovery and an accessible real-time spell checker.</p>
+
+	<h2>Changes in version 1.4.2</h2>
+	<p>When the current password is rejected while changing the password or recovery settings, the message now identifies the current password without referring to an incorrect recovery phrase. The message is translated into every supported language.</p>
+	<p>Regression tests cover passwords up to 4,096 characters, including punctuation and Unicode. The user who reported the issue confirmed that the updated add-on works with his 128-character password and that the misleading message no longer appears. The recovery phrase remains optional.</p>
 
 	<h2>What's new in version 1.4.1</h2>
 	<ul>

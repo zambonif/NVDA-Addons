@@ -2,7 +2,14 @@
 
 [English](README.md) · [Português do Brasil](README.pt-BR.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Français](README.fr.md)
 
-Version 1.3.0
+Version 1.4.2
+
+## Nouveautés de la version 1.4.2
+
+Si le mot de passe actuel est refusé lors de la modification du mot de passe ou de la récupération, le message identifie désormais le mot de passe actuel sans mentionner une phrase de récupération incorrecte. Le message est traduit dans toutes les langues du module.
+
+Les tests de régression couvrent des mots de passe allant jusqu’à 4 096 caractères, avec de la ponctuation et de l’Unicode. L’utilisateur ayant signalé le problème a confirmé que le module mis à jour fonctionne avec son mot de passe de 128 caractères et que le message trompeur n’apparaît plus. La phrase de récupération reste facultative.
+
 
 Journal pour NVDA est un journal personnel accessible et hors ligne, intégré au lecteur d'écran NVDA. Sa combinaison distinctive réunit des entrées datées, l'enregistrement automatique de leur création, un coffre-fort chiffré protégé par mot de passe, une récupération facultative et une correction orthographique accessible en temps réel.
 
@@ -27,7 +34,7 @@ Journal pour NVDA est un journal personnel accessible et hors ligne, intégré a
 
 ## Installation et ouverture
 
-Installez `diario-1.3.0.nvda-addon` depuis l'Add-on Store de NVDA ou ouvrez directement le paquet et confirmez l'installation. Redémarrez NVDA lorsque cela est demandé.
+Installez `diario-1.4.2.nvda-addon` en ouvrant directement le paquet et confirmez l'installation. Redémarrez NVDA lorsque cela est demandé.
 
 Ouvrez le Journal depuis menu NVDA > Outils > Journal ou appuyez sur NVDA+Alt+D. Le geste peut être modifié dans Gestes de commandes, catégorie Journal.
 
